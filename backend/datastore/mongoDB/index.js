@@ -85,7 +85,7 @@ const mongoDataStore = {
         const user = await User.findOne(
             { _id: mongoose.mongo.ObjectId(userId) }
         ).exec();
-        return user.categories
+        return user.categories;
     },
     async createCategory(userId, category) {
         return await User.updateOne(
