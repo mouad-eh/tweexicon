@@ -23,7 +23,7 @@ const dotenv = require("dotenv");
         }
         const user = await mongoDataStore.createUser({ firstName, lastName, email, password: hashPassword(password) });
         const jwt = signJwt({ userId: user._id });
-        return res.status(200).send({ jwt });
+        return res.send({ jwt });
     });
     app.post("/signin", async (req, res) => {
         const { email, password } = req.body;
@@ -35,7 +35,7 @@ const dotenv = require("dotenv");
             return res.status(401).send({ error: "Incorrect passoword." });
         }
         const jwt = signJwt({ userId: user._id });
-        return res.status(200).send({ jwt });
+        return res.send({ jwt });
     });
     app.use(async (req, res, next) => {
         const token = req.headers.authorization.split(" ")[1]; //authorization: Bearer <token>
@@ -47,34 +47,75 @@ const dotenv = require("dotenv");
         res.locals.userId = payload.userId;
         return next();
     });
+
     //posts
-    app.get("/posts/:category", (req, res) => {
-        // listPostsInCategory(userId,cursor,limit,dir)
+    app.get("/posts", async (req, res) => {
+        var posts;
+        const userId = res.locals.userId;
+        const { cursor = undefined, limit = 5, dir = "next" } = req.query;
+        if (!cursor) {
+            posts = await mongoDataStore.listNextPosts(userId, limit);
+        } else if (dir == "next") {
+            posts = await mongoDataStore.listNextPosts(userId, limit, cursor);
+        } else { // dir == "previous"
+            posts = await mongoDataStore.listPreviousPosts(userId, limit, cursor);
+        }
+        return res.send(posts)
     });
-    app.get("/posts/:id", (req, res) => {
-        // getPostById(userId,postId)
+    app.get("/posts/:category", async (req, res) => {
+        var posts;
+        const userId = res.locals.userId;
+        const categoryName = req.params.category;
+        const { cursor = undefined, limit = 5, dir } = req.query;
+        if (!cursor) {
+            posts = await mongoDataStore.listNextPostsInCategory(userId, categoryName, limit);
+        } else if (dir == "next") {
+            posts = await mongoDataStore.listNextPostsInCategory(userId, categoryName, limit, cursor);
+        } else { // dir == "previous"
+            posts = await mongoDataStore.listPreviousPostsInCategory(userId, categoryName, limit, cursor);
+        }
+        return res.send(posts)
     });
-    app.get("/posts", (req, res) => {
-        // listPosts(userId,cursor,limit,dir): cursor is optional
+    // app.get("/posts/:id", (req, res) => {
+    //     // getPostById(userId,postId)
+    // });
+    app.post("/posts", async (req, res) => {
+        const { url, categoryName } = req.body;
+        const post = await mongoDataStore.createPost({
+            userId: res.locals.userId,
+            url,
+            categoryName
+        });
+        return res.send(post);
     });
-    app.post("/posts", (req, res) => {
-        // createPost(post)
-    });
-    app.delete("/posts/:id", (req, res) => {
-        // deleteCategory(categoryName)
+    app.delete("/posts/:id", async (req, res) => {
+        const result = await mongoDataStore.deletePost(res.locals.userId, req.params.id);
+        console.log(result);
+        if (!result.deletedCount) {
+            return res.status(500).send({ error: "Failed to delete the post." });
+        }
+        return res.send({ deletion: "Success." });
     });
 
     //categories
     app.get("/categories", async (req, res) => {
         const categories = await mongoDataStore.listCategories(res.locals.userId);
-        return res.status(200).send(categories);
-        // listCategories(userId)
+        return res.send(categories);
     });
-    app.post("/categories", (req, res) => {
-        // createCategory(category)
+    app.post("/categories", async (req, res) => {
+        const category = req.body; // {name: "",color:""}
+        const result = await mongoDataStore.createCategory(res.locals.userId, category);
+        if (!result.modifiedCount) {
+            return res.status(500).send({ error: "New category creation failed." });
+        }
+        return res.send({ creation: "Success." });
     });
-    app.delete("/categories/:name", (req, res) => {
-        // deleteCategory(categoryName)
+    app.delete("/categories/:name", async (req, res) => {
+        const result = await mongoDataStore.deleteCategory(res.locals.userId, req.params.name);
+        if (!result.modifiedCount) {
+            return res.status(500).send({ error: "Failed to delete the category." });
+        }
+        return res.send({ deletion: "success" });
     });
 
     app.listen(
