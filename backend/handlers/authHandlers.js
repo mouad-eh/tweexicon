@@ -22,7 +22,12 @@ async function signInHandler(req, res) {
         return res.status(401).send({ error: "Incorrect passoword." });
     }
     const jwt = signJwt({ userId: user._id });
-    return res.send({ jwt });
+    return res.send({
+        jwt,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email
+    }); //firstName, lastName, email are returned cuz they are useful for front-end
 }
 
 module.exports = { signUpHandler, signInHandler };
