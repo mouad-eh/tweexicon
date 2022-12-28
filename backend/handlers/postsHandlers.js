@@ -34,15 +34,16 @@ async function createPostHandler(req, res) {
         url,
         categoryName
     });
-    return res.send(post);
+    return res.status(201).send(post);
 }
 async function deletePostHandler(req, res) {
     const result = await db.deletePost(res.locals.userId, req.params.id);
-    console.log(result);
     if (!result.deletedCount) {
-        return res.status(500).send({ error: "Failed to delete the post." });
+        //this will never happen because we are sure that the post exists
+        //since the user will be clicking the delete button in post card displayed
+        return res.status(500).send({ error: "Post deletion failed." });
     }
-    return res.send({ deletion: "Success." });
+    return res.send({ deletion: "success" });
 }
 
 module.exports = { listPostsHandler, listPostsInCategoryHandler, createPostHandler, deletePostHandler };
