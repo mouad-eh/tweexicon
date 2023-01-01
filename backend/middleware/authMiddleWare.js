@@ -12,6 +12,12 @@ async function authMiddleWare(req, res, next) {
     try {
         var payload = verifyJwt(token);
     } catch (err) {
+        // err = {
+        //     name: 'TokenExpiredError',
+        //     message: 'jwt expired',
+        //     expiredAt: 1408621000
+        //   }
+        // err.name will be used in the frontend to display a proper message to the user
         return res.status(400).send({ error: err });
     }
     res.locals.userId = payload.userId;
