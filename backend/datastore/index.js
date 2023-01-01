@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-
-dotenv.config();
+const { mongoDataStore } = require("./mongoDB/index")
 
 async function connectToDb() {
     try {
@@ -10,4 +8,4 @@ async function connectToDb() {
         console.log(err);
     }
 }
-module.exports = { connectToDb }
+module.exports = { connectToDb, db: mongoDataStore }

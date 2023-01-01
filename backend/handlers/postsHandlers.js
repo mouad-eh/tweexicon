@@ -1,4 +1,4 @@
-const { mongoDataStore: db } = require("../datastore/mongoDB/index");
+const { db } = require("../datastore/index");
 
 async function listPostsHandler(req, res) {
     var posts;
@@ -38,11 +38,9 @@ async function createPostHandler(req, res) {
 }
 async function deletePostHandler(req, res) {
     const result = await db.deletePost(res.locals.userId, req.params.id);
-    if (!result.deletedCount) {
-        //this will never happen because we are sure that the post exists
-        //since the user will be clicking the delete button in post card displayed
-        return res.status(500).send({ error: "Post deletion failed." });
-    }
+    // if (!result.deletedCount) {
+    //     return res.status(500).send({ error: "Post deletion failed." });
+    // }
     return res.send({ deletion: "success" });
 }
 

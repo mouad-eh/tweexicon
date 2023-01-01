@@ -1,4 +1,4 @@
-const { mongoDataStore: db } = require("../datastore/mongoDb/index");
+const { db } = require("../datastore/index");
 const { hashPassword, signJwt } = require("../utils/auth");
 
 async function signUpHandler(req, res) {

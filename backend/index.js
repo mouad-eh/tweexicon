@@ -26,6 +26,7 @@ const dotenv = require("dotenv");
     // app.get("/posts/:id", (req, res) => {
     //     // getPostById(userId,posjtId)
     // });
+    // this endpoint is commented because it overlaps with 'GET /posts/:category'
     app.post("/posts", createPostHandler);
     app.delete("/posts/:id", deletePostHandler);
 
