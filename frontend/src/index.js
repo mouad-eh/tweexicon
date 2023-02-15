@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { CssVarsProvider } from '@mui/joy/styles';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <CssVarsProvider>
+      <App />
+    </CssVarsProvider>
   </React.StrictMode>
 );
 
