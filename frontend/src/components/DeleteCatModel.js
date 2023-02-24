@@ -2,7 +2,7 @@ import React from 'react';
 import { Autocomplete, Box, Button, Modal, ModalDialog, Typography } from '@mui/joy';
 
 export default function DeleteCatModel({ open, setOpen }) {
-    const options = ["dev", "life", "podcast"];
+    const options = ["dev", "life", "this is my very long category"];
     return (
         <Modal open={open} onClose={() => setOpen(false)}>
             <ModalDialog sx={{
@@ -14,7 +14,9 @@ export default function DeleteCatModel({ open, setOpen }) {
                 <Typography level='h6' fontWeight="bold" textAlign="center">Delete Category</Typography>
                 <Box>
                     <Typography sx={{ mb: "0.25rem" }}>Category</Typography>
-                    <Autocomplete placeholder='search...' options={options}></Autocomplete>
+                    <Autocomplete placeholder='search...' options={options} sx={{
+                        width: "100%"
+                    }}></Autocomplete>
                 </Box>
                 <Button color='danger' variant='soft'>Delete</Button>
             </ModalDialog>

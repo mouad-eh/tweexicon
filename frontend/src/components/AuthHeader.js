@@ -22,8 +22,18 @@ export default function AuthHeader() {
                 alignItems: "center",
                 gap: "1rem"
             }}>
-                <Typography level='body1' sx={{ color: "neutral.500" }}>Mouad Elhaouari</Typography>
-                <Button size='sm' color='primary' variant='solid' startDecorator={<Logout />}>log out</Button>
+                <Typography level='body1' sx={{
+                    color: "neutral.500",
+                    display: {
+                        xs: "none",
+                        sm: "inherit"
+                    }
+                }}>
+                    Mouad Elhaouari
+                </Typography>
+                <Button color='primary' variant='solid' startDecorator={<Logout />}>
+                    log out
+                </Button>
             </Box>
         </Sheet>
     )

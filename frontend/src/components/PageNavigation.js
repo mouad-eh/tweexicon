@@ -12,10 +12,11 @@ export default function PageNavigation() {
             justifyContent: "center",
             alignItems: "center",
             gap: "0.25rem",
+            mt: "auto",//stick footer to the bottom
             mb: "1rem"
         }}>
-            <Button size="sm" variant='outlined' startDecorator={<KeyboardArrowLeft />}>previous</Button>
-            <Button size="sm" variant='outlined' endDecorator={<KeyboardArrowRight />}>next</Button>
+            <Button variant='outlined' startDecorator={<KeyboardArrowLeft />}>previous</Button>
+            <Button variant='outlined' endDecorator={<KeyboardArrowRight />}>next</Button>
         </Sheet >
     )
 }

@@ -13,10 +13,10 @@ export default function Footer() {
             gap: "0.25rem",
             mx: "auto"
         }}>
-            <Typography>made with</Typography>
-            <FavoriteIcon sx={{ color: "red" }}></FavoriteIcon>
-            <Typography>by{' '}
-                <Link underline="hover" href='https://github.com/mouad-eh' sx={{ color: "#096bde" }}>@mouad-eh</Link>
+            <Typography level='body2'>made with</Typography>
+            <FavoriteIcon fontSize='small' sx={{ color: "red" }}></FavoriteIcon>
+            <Typography level='body2'>by{' '}
+                <Link underline="hover" href='https://github.com/mouad-eh' sx={{ color: "primary.500" }}>@mouad-eh</Link>
             </Typography>
         </Sheet>
     )

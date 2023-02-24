@@ -3,7 +3,7 @@ import { Autocomplete, Box, Button, Sheet, Typography } from '@mui/joy';
 import { Add, Delete } from '@mui/icons-material';
 
 export default function OptionsBar({ setNewPostOpen, setDeleteCatOpen }) {
-    const options = ["dev", "life", "podcast"]
+    const options = ["dev", "life", "this is my long category"]
     return (
         <Sheet sx={{
             px: "1rem",
@@ -22,11 +22,20 @@ export default function OptionsBar({ setNewPostOpen, setDeleteCatOpen }) {
         }}>
             <Box sx={{
                 display: "flex",
+                flexDirection: {
+                    xs: "column",
+                    sm: "row"
+                },
                 alignItems: "center",
                 gap: '0.5rem'
             }}>
-                <Typography>filter by category:</Typography>
-                <Autocomplete placeholder='search...' options={options}></Autocomplete>
+                <Typography sx={{
+                    display: {
+                        xs: "none",
+                        sm: "inherit"
+                    }
+                }}>filter by category:</Typography>
+                <Autocomplete placeholder='filter by category' options={options}></Autocomplete>
                 {/* will add custom option appearance */}
             </Box>
             <Box sx={{

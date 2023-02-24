@@ -12,7 +12,11 @@ export default function MainPage() {
     const [newPostOpen, setNewPostOpen] = useState(false);
     const [deleteCatOpen, setDeleteCatOpen] = useState(false);
     return (
-        <Sheet>
+        <Sheet sx={{ //stick footer to the bottom
+            minHeight: "100vh",
+            display: "flex",
+            flexDirection: "column"
+        }}>
             <AuthHeader></AuthHeader>
             <OptionsBar setNewPostOpen={setNewPostOpen} setDeleteCatOpen={setDeleteCatOpen}></OptionsBar>
             <AddPostModel open={newPostOpen} setOpen={setNewPostOpen}></AddPostModel>

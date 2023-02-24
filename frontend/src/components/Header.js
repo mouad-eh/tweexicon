@@ -13,10 +13,10 @@ export default function Header() {
             alignItems: "center",
             boxShadow: "sm"
         }} >
-            <Typography level='h5' fontWeight="bold" sx={{ color: "#096bde" }}>tweexicon</Typography>
+            <Typography level='h5' fontWeight="bold" sx={{ color: "primary.500" }}>tweexicon</Typography>
             <div>
-                <Button size='sm' sx={{ mr: "0.5rem" }} color='primary' variant='solid'>Sign up</Button>
-                <Button size='sm' color='primary' variant='outlined'>Sign in</Button>
+                <Button sx={{ mr: "0.5rem" }} color='primary' variant='solid'>Sign up</Button>
+                <Button color='primary' variant='outlined'>Sign in</Button>
             </div>
         </Sheet>
     )

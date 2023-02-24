@@ -32,18 +32,36 @@ export default function AddPostModel({ open, setOpen }) {
                         placeholder="url"
                     />
                 </FormControl>
-                <Box>
+                <FormControl>
                     <FormLabel sx={{ mb: "0.25rem" }}>Category</FormLabel>
                     <Box sx={{
                         display: "flex",
+                        flexDirection: {
+                            xs: "column",
+                            sm: "row"
+                        },
                         justifyContent: "space-between",
+                        gap: {
+                            xs: "1rem",
+                            sm: 0
+                        },
                         alignItems: "center"
                     }}>
-                        <Autocomplete placeholder='search...' options={options}></Autocomplete>
-                        <Button color='success' variant='solid' startDecorator={<Add />} onClick={() => setNewCatOpen(true)}>New Category</Button>
+                        <Autocomplete placeholder='search...' options={options} sx={{
+                            width: {
+                                xs: "100%",
+                                sm: "auto"
+                            }
+                        }}></Autocomplete>
+                        <Button color='success' variant='solid' sx={{
+                            width: {
+                                xs: "100%",
+                                sm: "auto"
+                            }
+                        }} startDecorator={<Add />} onClick={() => setNewCatOpen(true)}>New Category</Button>
                         <AddCatModel open={newCatOpen} setOpen={setNewCatOpen}></AddCatModel>
                     </Box>
-                </Box>
+                </FormControl>
                 <Button color='success' variant='soft'>Save</Button>
             </ModalDialog>
         </Modal >
