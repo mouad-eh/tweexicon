@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { Autocomplete, Box, Button, FormControl, FormLabel, Input, Modal, ModalDialog, Typography } from '@mui/joy';
+import { Box, Button, FormControl, FormLabel, Input, Modal, ModalDialog, Typography } from '@mui/joy';
 import Add from '@mui/icons-material/Add';
 import AddCatModel from './AddCatModel';
+import CustomAutoComplete from './CustomAutoComplete';
 
 export default function AddPostModel({ open, setOpen }) {
-    const options = ["dev", "life", "podcast"];
+    const options = [
+        { name: "dev", color: "#0F61E9" },
+        { name: "life", color: "#0FE914" },
+        { name: "sport", color: "#E90F8E" }
+    ]
     const [newCatOpen, setNewCatOpen] = useState(false);
-    const [color, setColor] = React.useState('#ffffff')
-
-    const handleChange = (color) => {
-        setColor(color)
-    }
     return (
         <Modal open={open} onClose={() => setOpen(false)}>
             <ModalDialog sx={{
@@ -47,12 +47,12 @@ export default function AddPostModel({ open, setOpen }) {
                         },
                         alignItems: "center"
                     }}>
-                        <Autocomplete placeholder='search...' options={options} sx={{
+                        <CustomAutoComplete placeholder='search...' options={options} sx={{
                             width: {
                                 xs: "100%",
                                 sm: "auto"
                             }
-                        }}></Autocomplete>
+                        }}></CustomAutoComplete>
                         <Button color='success' variant='solid' sx={{
                             width: {
                                 xs: "100%",

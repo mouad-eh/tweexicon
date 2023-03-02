@@ -1,9 +1,14 @@
 import React from 'react';
-import { Autocomplete, Box, Button, Sheet, Typography } from '@mui/joy';
+import { Box, Button, Sheet, Typography } from '@mui/joy';
 import { Add, Delete } from '@mui/icons-material';
+import CustomAutoComplete from './CustomAutoComplete';
 
 export default function OptionsBar({ setNewPostOpen, setDeleteCatOpen }) {
-    const options = ["dev", "life", "this is my long category"]
+    const options = [
+        { name: "dev", color: "#0F61E9" },
+        { name: "life", color: "#0FE914" },
+        { name: "sport", color: "#E90F8E" }
+    ]
     return (
         <Sheet sx={{
             px: "1rem",
@@ -35,8 +40,7 @@ export default function OptionsBar({ setNewPostOpen, setDeleteCatOpen }) {
                         sm: "inherit"
                     }
                 }}>filter by category:</Typography>
-                <Autocomplete placeholder='filter by category' options={options}></Autocomplete>
-                {/* will add custom option appearance */}
+                <CustomAutoComplete placeholder='filter by category' options={options} />
             </Box>
             <Box sx={{
                 display: "flex",
