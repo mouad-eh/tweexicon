@@ -1,6 +1,6 @@
 import Box from '@mui/joy/Box';
 import Sheet from '@mui/joy/Sheet';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Masonry from 'react-masonry-css';
 
 function createMarkup(html) {
@@ -21,13 +21,20 @@ export default function PostsGrid() {
         "<blockquote class=\"twitter-tweet\" data-width=\"350\"><p lang=\"ar\" dir=\"rtl\">للأمانة هذا الكورس مرجع عظيم لأي حد حابب يتعلم الـ ML شرح ممتاز ومدرس عظيم و مغطي جوانب كثيرة جدا وأساسية مفيش حشو على الفاضي <a href=\"https://t.co/5LOi4ure2d\">https://t.co/5LOi4ure2d</a></p>&mdash; Ali (@AliGreo) <a href=\"https://twitter.com/AliGreo/status/1607756704963256321?ref_src=twsrc%5Etfw\">December 27, 2022</a></blockquote>\n",
         "<blockquote class=\"twitter-tweet\" data-width=\"350\"><p lang=\"en\" dir=\"ltr\">Beauty is in the 👁️ of the browser<br><br>Presenting... Peek! <a href=\"https://t.co/ONdQ3Ip4Ko\">pic.twitter.com/ONdQ3Ip4Ko</a></p>&mdash; The Browser Company (@browsercompany) <a href=\"https://twitter.com/browsercompany/status/1626242699648192514?ref_src=twsrc%5Etfw\">February 16, 2023</a></blockquote>\n"
     ];
+    useEffect(() => {
+        window.twttr.widgets.load(
+            document.getElementsByClassName("my-masonry-grid")[0]
+        );
+    })
     return (
         <Sheet sx={{
             my: "1rem",
             display: "flex",
             justifyContent: "center",
             alignItems: "center"
-        }}>
+        }}
+            className='masonry'
+        >
             <Masonry
                 breakpointCols={breakpointColumnsObj}
                 className="my-masonry-grid"
