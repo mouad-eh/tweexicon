@@ -10,7 +10,7 @@ async function signUpHandler(req, res) {
         });
     }
     const user = await db.createUser({ firstName, lastName, email, password: hashPassword(password) });
-    const jwt = signJwt({ userId: user._id });
+    const jwt = signJwt({ userId: user._id, firstName, lastName, email });
     return res.status(201).send({ jwt });
 }
 async function signInHandler(req, res) {
@@ -35,13 +35,11 @@ async function signInHandler(req, res) {
             }
         });
     }
-    const jwt = signJwt({ userId: user._id });
+    const jwt = signJwt({ userId: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email });
+    //firstName, lastName, email are returned cuz they are useful for front-end
     return res.send({
         jwt,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email
-    }); //firstName, lastName, email are returned cuz they are useful for front-end
+    });
 }
 
 module.exports = { signUpHandler, signInHandler };

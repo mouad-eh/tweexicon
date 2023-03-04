@@ -5,6 +5,7 @@ const { authMiddleWare } = require("./middleware/authMiddleWare");
 const { listPostsHandler, listPostsInCategoryHandler, createPostHandler, deletePostHandler } = require("./handlers/postsHandlers");
 const { listCategoriesHandler, createCategoryHandler, deleteCategoryHandler } = require("./handlers/categoriesHandlers")
 const dotenv = require("dotenv");
+const cors = require('cors');
 
 (async () => {
     dotenv.config();
@@ -12,7 +13,7 @@ const dotenv = require("dotenv");
     await connectToDb();
 
     const app = express();
-
+    app.use(cors());
     app.use(express.json());
 
     //auth
