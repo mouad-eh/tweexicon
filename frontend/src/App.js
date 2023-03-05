@@ -1,23 +1,19 @@
 import './App.css';
-import AuthHeader from './components/AuthHeader';
-import OptionsBar from './components/OptionsBar';
-import PostsGrid from './components/PostsGrid';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
-import PageNavigation from './components/PageNavigation';
-import Footer from './components/Footer';
 import MainPage from './pages/MainPage';
+import { Routes, Route } from 'react-router-dom';
+import AuthProtected from './components/AuthProtected';
 
 function App() {
   return (
     <>
-      {/* <SignInPage></SignInPage> */}
-      {/* <SignUpPage></SignUpPage> */}
-      {/* <AuthHeader></AuthHeader>
-      <OptionsBar></OptionsBar>
-      <PostsGrid></PostsGrid>
-      <PageNavigation></PageNavigation> */}
-      <MainPage></MainPage>
+      <Routes>
+        <Route path='/' element={<SignInPage />} />
+        <Route path='/signin' element={<SignInPage />} />
+        <Route path='/signup' element={<SignUpPage />} />
+        <Route path='/mainpage' element={<AuthProtected><MainPage /></AuthProtected>} />
+      </Routes>
     </>
   );
 }

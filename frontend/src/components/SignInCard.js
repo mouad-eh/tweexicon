@@ -10,8 +10,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import jwt from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignInCard() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     useEffect(() => {
         setIncorrectEmail(false);
@@ -40,6 +42,7 @@ export default function SignInCard() {
                     })
                     console.log(response.data); // {jwt: ""}
                     // redirection to the main page
+                    navigate("/mainpage")
                 }).catch(function (err) {
                     const error = err.response.data.error;
                     if (error.code === 450) {
