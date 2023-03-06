@@ -8,7 +8,7 @@ import Box from '@mui/joy/Box';
 import Link from '@mui/joy/Link';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Cookies from 'universal-cookie';
+import Cookies from 'js-cookie';
 import jwt from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,14 +35,13 @@ export default function SignInCard() {
                     { headers: { 'Content-Type': 'application/json' } }
                 ).then(function (response) {
                     const payload = jwt(response.data.jwt);
-                    const cookies = new Cookies();
-                    cookies.set("jwt-authorization", response.data.jwt, {
+                    Cookies.set("jwt-authorization", response.data.jwt, {
                         path: '/',
+                        // domain: 'localhost',
                         expires: new Date(payload.exp * 1000)
                     })
-                    console.log(response.data); // {jwt: ""}
                     // redirection to the main page
-                    navigate("/mainpage")
+                    navigate("/mainpage");
                 }).catch(function (err) {
                     const error = err.response.data.error;
                     if (error.code === 450) {
@@ -51,7 +50,6 @@ export default function SignInCard() {
                     else { // error.code == 451
                         setIncorrectPassword(true);
                     }
-                    console.log(error.code, error.message);
                 });
             }
         }>

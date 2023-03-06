@@ -8,9 +8,11 @@ import Box from '@mui/joy/Box';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import jwt from 'jwt-decode';
-import Cookies from 'universal-cookie';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUpCard() {
+    const navigate = useNavigate();
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -27,24 +29,24 @@ export default function SignUpCard() {
     return (
         <form onSubmit={(e) => {
             e.preventDefault();
-            // console.log(firstName, lastName, email, password, confirmPassword);
             if (password !== confirmPassword) {
                 setPasswordNoMatch(true);
             } else {
-                console.log(firstName, lastName, email, password, confirmPassword);
+                // console.log(firstName, lastName, email, password, confirmPassword);
                 axios.post(
                     "http://localhost:3000/signup",
                     { firstName, lastName, email, password },
                     { headers: { 'Content-Type': 'application/json' } }
                 ).then(function (response) {
                     const payload = jwt(response.data.jwt);
-                    const cookies = new Cookies();
-                    cookies.set("jwt-authorization", response.data.jwt, {
+                    Cookies.set("jwt-authorization", response.data.jwt, {
                         path: '/',
+                        // domain: 'localhost',
                         expires: new Date(payload.exp * 1000)
                     })
                     console.log(response.data); // {jwt: ""}
                     // redirection to the main page
+                    navigate("/mainpage");
                 }).catch(function (err) {
                     setDuplicateEmail(true);
                 });
