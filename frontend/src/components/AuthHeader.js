@@ -1,25 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Box, Button, Sheet, Typography } from '@mui/joy';
 import Logout from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import jwt from 'jwt-decode';
+import { JWT_COOKIE } from '../utils/constants';
 
 
 
 export default function AuthHeader() {
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-
+    const payload = jwt(Cookies.get(JWT_COOKIE));
     function capitalize(s) {
         return s[0].toUpperCase() + s.slice(1);
     }
 
-    useEffect(() => {
-        const payload = jwt(Cookies.get("jwt-authorization"));
-        setFirstName(capitalize(payload.firstName));
-        setLastName(capitalize(payload.lastName));
-    }, []);
     return (
         <Sheet sx={{
             px: "1rem",
@@ -46,14 +40,14 @@ export default function AuthHeader() {
                         sm: "inherit"
                     }
                 }}>
-                    {firstName + ' ' + lastName}
+                    {capitalize(payload.firstName) + ' ' + capitalize(payload.lastName)}
                 </Typography>
                 <Link to='/' style={{ textDecoration: 'none' }}>
                     <Button color='primary' variant='solid' startDecorator={<Logout />} onClick={() => {
-                        const payload = jwt(Cookies.get("jwt-authorization"));
-                        Cookies.remove("jwt-authorization", {
+                        const payload = jwt(Cookies.get(JWT_COOKIE));
+                        Cookies.remove(JWT_COOKIE, {
                             path: '/',
-                            // domain: 'localhost',
+                            domain: process.env.REACT_APP_DOMAIN,
                             expires: new Date(payload.exp * 1000)
                         })
                     }}>

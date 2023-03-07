@@ -11,6 +11,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import jwt from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
+import { HOME_PATH, JWT_COOKIE, SIGNUP_PATH } from '../utils/constants';
 
 export default function SignInCard() {
     const navigate = useNavigate();
@@ -30,18 +31,18 @@ export default function SignInCard() {
             (e) => {
                 e.preventDefault();
                 axios.post(
-                    "http://localhost:3000/signin",
+                    process.env.REACT_APP_SIGNIN_ENDPOINT,
                     { email: email, password: password },
                     { headers: { 'Content-Type': 'application/json' } }
                 ).then(function (response) {
                     const payload = jwt(response.data.jwt);
-                    Cookies.set("jwt-authorization", response.data.jwt, {
+                    Cookies.set(JWT_COOKIE, response.data.jwt, {
                         path: '/',
-                        // domain: 'localhost',
+                        domain: process.env.REACT_APP_DOMAIN,
                         expires: new Date(payload.exp * 1000)
                     })
-                    // redirection to the main page
-                    navigate("/mainpage");
+                    // redirection to the home page
+                    navigate(HOME_PATH);
                 }).catch(function (err) {
                     const error = err.response.data.error;
                     if (error.code === 450) {
@@ -109,7 +110,7 @@ export default function SignInCard() {
                     </Button>
                     <Typography level='body2' sx={{ mt: "0.5rem", textAlign: "center" }}>
                         if you didn't sign up yet, please{' '}
-                        <Link underline="hover" href='/signup' sx={{ color: "#096bde" }}>sign up</Link>
+                        <Link underline="hover" href={SIGNUP_PATH} sx={{ color: "#096bde" }}>sign up</Link>
                     </Typography>
                 </Box>
             </Sheet >

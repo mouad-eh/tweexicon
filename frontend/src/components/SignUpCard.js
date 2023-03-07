@@ -10,6 +10,7 @@ import axios from 'axios';
 import jwt from 'jwt-decode';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { HOME_PATH, JWT_COOKIE } from '../utils/constants';
 
 export default function SignUpCard() {
     const navigate = useNavigate();
@@ -32,21 +33,19 @@ export default function SignUpCard() {
             if (password !== confirmPassword) {
                 setPasswordNoMatch(true);
             } else {
-                // console.log(firstName, lastName, email, password, confirmPassword);
                 axios.post(
-                    "http://localhost:3000/signup",
+                    process.env.REACT_APP_SIGNUP_ENDPOINT,
                     { firstName, lastName, email, password },
                     { headers: { 'Content-Type': 'application/json' } }
                 ).then(function (response) {
                     const payload = jwt(response.data.jwt);
-                    Cookies.set("jwt-authorization", response.data.jwt, {
+                    Cookies.set(JWT_COOKIE, response.data.jwt, {
                         path: '/',
-                        // domain: 'localhost',
+                        domain: process.env.REACT_APP_DOMAIN,
                         expires: new Date(payload.exp * 1000)
                     })
-                    console.log(response.data); // {jwt: ""}
-                    // redirection to the main page
-                    navigate("/mainpage");
+                    // redirection to the home page
+                    navigate(HOME_PATH);
                 }).catch(function (err) {
                     setDuplicateEmail(true);
                 });
@@ -136,7 +135,7 @@ export default function SignUpCard() {
                     />
                     {passwordNoMatch ? <Typography level='body2' color='danger'>passwords are not matching, try again.</Typography> : null}
                 </FormControl>
-                <Button color='primary' variant='solid' sx={{ mt: "0.5rem" }} type='submi'>Sign up</Button>
+                <Button color='primary' variant='solid' sx={{ mt: "0.5rem" }} type='submit'>Sign up</Button>
             </Sheet>
         </form>
     )
