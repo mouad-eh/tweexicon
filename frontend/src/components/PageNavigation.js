@@ -1,5 +1,4 @@
 import React from 'react';
-import Chip from '@mui/joy/Chip';
 import Sheet from '@mui/joy/Sheet';
 import Button from '@mui/joy/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';

@@ -1,14 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Button, Sheet, Typography } from '@mui/joy';
 import { Add, Delete } from '@mui/icons-material';
 import CustomAutoComplete from './CustomAutoComplete';
+import { CategoriesContext } from '../utils/context';
 
 export default function OptionsBar({ setNewPostOpen, setDeleteCatOpen }) {
-    const options = [
-        { name: "dev", color: "#0F61E9" },
-        { name: "life", color: "#0FE914" },
-        { name: "sport", color: "#E90F8E" }
-    ]
+    const { categories } = useContext(CategoriesContext);
+
     return (
         <Sheet sx={{
             px: "1rem",
@@ -40,7 +38,7 @@ export default function OptionsBar({ setNewPostOpen, setDeleteCatOpen }) {
                         sm: "inherit"
                     }
                 }}>filter by category:</Typography>
-                <CustomAutoComplete placeholder='filter by category' options={options} />
+                <CustomAutoComplete placeholder='filter by category' options={categories} />
             </Box>
             <Box sx={{
                 display: "flex",

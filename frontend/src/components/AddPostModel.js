@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box, Button, FormControl, FormLabel, Input, Modal, ModalDialog, Typography } from '@mui/joy';
 import Add from '@mui/icons-material/Add';
 import AddCatModel from './AddCatModel';
 import CustomAutoComplete from './CustomAutoComplete';
+import { CategoriesContext } from '../utils/context';
 
 export default function AddPostModel({ open, setOpen }) {
-    const options = [
-        { name: "dev", color: "#0F61E9" },
-        { name: "life", color: "#0FE914" },
-        { name: "sport", color: "#E90F8E" }
-    ]
     const [newCatOpen, setNewCatOpen] = useState(false);
+    const { categories } = useContext(CategoriesContext);
+
     return (
         <Modal open={open} onClose={() => setOpen(false)}>
             <ModalDialog sx={{
@@ -47,7 +45,7 @@ export default function AddPostModel({ open, setOpen }) {
                         },
                         alignItems: "center"
                     }}>
-                        <CustomAutoComplete placeholder='search...' options={options} sx={{
+                        <CustomAutoComplete placeholder='search...' options={categories} sx={{
                             width: {
                                 xs: "100%",
                                 sm: "auto"
