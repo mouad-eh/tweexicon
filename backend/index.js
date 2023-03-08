@@ -6,6 +6,7 @@ const { listPostsHandler, listPostsInCategoryHandler, createPostHandler, deleteP
 const { listCategoriesHandler, createCategoryHandler, deleteCategoryHandler } = require("./handlers/categoriesHandlers")
 const dotenv = require("dotenv");
 const cors = require('cors');
+const proxyHandler = require('./handlers/proxyHandler');
 
 (async () => {
     dotenv.config();
@@ -15,6 +16,9 @@ const cors = require('cors');
     const app = express();
     app.use(cors());
     app.use(express.json());
+
+    //proxy
+    app.get("/proxy", proxyHandler);
 
     //auth
     app.post("/signup", signUpHandler);
