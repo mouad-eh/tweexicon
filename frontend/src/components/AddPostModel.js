@@ -1,13 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Button, FormControl, FormLabel, Input, Modal, ModalDialog, Typography } from '@mui/joy';
 import Add from '@mui/icons-material/Add';
 import AddCatModel from './AddCatModel';
 import CustomAutoComplete from './CustomAutoComplete';
-import { CategoriesContext } from '../utils/context';
+import { fetchCategories } from '../utils/apiCalls';
+import { useQuery } from '@tanstack/react-query';
 
 export default function AddPostModel({ open, setOpen }) {
     const [newCatOpen, setNewCatOpen] = useState(false);
-    const { categories } = useContext(CategoriesContext);
+    const { isLoading, data: categories } = useQuery(['categories'], fetchCategories);
 
     return (
         <Modal open={open} onClose={() => setOpen(false)}>
@@ -45,12 +46,14 @@ export default function AddPostModel({ open, setOpen }) {
                         },
                         alignItems: "center"
                     }}>
-                        <CustomAutoComplete placeholder='search...' options={categories} sx={{
-                            width: {
-                                xs: "100%",
-                                sm: "auto"
-                            }
-                        }}></CustomAutoComplete>
+                        <CustomAutoComplete placeholder='search...' options={isLoading ? [] : categories}
+                            loading={isLoading}
+                            sx={{
+                                width: {
+                                    xs: "100%",
+                                    sm: "auto"
+                                }
+                            }} />
                         <Button color='success' variant='solid' sx={{
                             width: {
                                 xs: "100%",

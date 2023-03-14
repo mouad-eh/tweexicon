@@ -1,11 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Sheet, Typography } from '@mui/joy';
 import { Add, Delete } from '@mui/icons-material';
 import CustomAutoComplete from './CustomAutoComplete';
-import { CategoriesContext } from '../utils/context';
+import AddPostModel from './AddPostModel';
+import DeleteCatModel from './DeleteCatModel';
+import { fetchCategories } from '../utils/apiCalls';
+import { useQuery } from '@tanstack/react-query';
 
-export default function OptionsBar({ setNewPostOpen, setDeleteCatOpen }) {
-    const { categories } = useContext(CategoriesContext);
+export default function OptionsBar({ setCategory }) {
+    const [newPostOpen, setNewPostOpen] = useState(false);
+    const [deleteCatOpen, setDeleteCatOpen] = useState(false);
+    const { isFetched, isLoading, data: categories } = useQuery(['categories'], fetchCategories);
 
     return (
         <Sheet sx={{
@@ -38,7 +43,11 @@ export default function OptionsBar({ setNewPostOpen, setDeleteCatOpen }) {
                         sm: "inherit"
                     }
                 }}>filter by category:</Typography>
-                <CustomAutoComplete placeholder='filter by category' options={categories} />
+                <CustomAutoComplete placeholder='filter by category'
+                    options={isFetched ? categories : []}
+                    onChange={(e, value) => setCategory(value ? value.name : null)}
+                    loading={isLoading}
+                />
             </Box>
             <Box sx={{
                 display: "flex",
@@ -48,6 +57,8 @@ export default function OptionsBar({ setNewPostOpen, setDeleteCatOpen }) {
                 <Button color='success' variant='soft' startDecorator={<Add />} onClick={() => setNewPostOpen(true)}>New Post</Button>
                 <Button color='danger' variant='soft' startDecorator={<Delete />} onClick={() => setDeleteCatOpen(true)}>Delete Category</Button>
             </Box>
+            <AddPostModel open={newPostOpen} setOpen={setNewPostOpen}></AddPostModel>
+            <DeleteCatModel open={deleteCatOpen} setOpen={setDeleteCatOpen}></DeleteCatModel>
         </Sheet>
     )
 }

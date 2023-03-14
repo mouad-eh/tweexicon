@@ -1,15 +1,19 @@
 import { FormControl, FormLabel, Input, Modal, ModalDialog, Typography, Button } from '@mui/joy';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import React, { useContext, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
-import { JWT_COOKIE } from '../utils/constants';
-import { CategoriesContext } from '../utils/context';
+import { queryClient } from '../utils/constants';
+import { addCategory } from '../utils/apiCalls';
 
 export default function AddCatModel({ open, setOpen }) {
     const [name, setName] = useState("");
     const [color, setColor] = React.useState('#ffffff');
-    const { categories, setCategories } = useContext(CategoriesContext);
+    const mutation = useMutation(addCategory, {
+        onSuccess: () => {
+            queryClient.refetchQueries(['categories'], { active: true })
+        },
+    });
+
 
     const handleChange = (color) => {
         setColor(color.hex);
@@ -19,23 +23,7 @@ export default function AddCatModel({ open, setOpen }) {
         <Modal open={open} onClose={() => setOpen(false)}>
             <form onSubmit={(e) => {
                 e.preventDefault();
-                axios.post(process.env.REACT_APP_CATEGORIES_ENDPOINT,
-                    { name, color },
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${Cookies.get(JWT_COOKIE)}`
-                        },
-                    }
-                ).then((res) => {
-                    // console.log(res.data);
-                    // it supposed to return the created object (with ID)
-                    // the created object can't be returned 
-                    // since we are doing an update operation in the DB
-                    // object in the list will not have the same properties
-                    // newly created objects are added to the list without ID property
-                    setCategories([...categories, { name, color }]);
-                }).catch((err) => console.log(err))
+                mutation.mutate({ name, color });
             }}>
                 <ModalDialog sx={{
                     maxWidth: 500,

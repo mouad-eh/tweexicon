@@ -1,30 +1,23 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Modal, ModalDialog, Typography } from '@mui/joy';
 import CustomAutoComplete from './CustomAutoComplete';
-import { CategoriesContext } from '../utils/context';
-import axios from 'axios';
-import { JWT_COOKIE } from '../utils/constants';
-import Cookies from 'js-cookie';
+import { queryClient } from '../utils/constants';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { deleteCategory, fetchCategories } from '../utils/apiCalls';
 
 export default function DeleteCatModel({ open, setOpen }) {
     const [category, setCategory] = useState({});
-    const { categories, setCategories } = useContext(CategoriesContext);
+    const { isLoading, data: categories } = useQuery(['categories'], fetchCategories);
+    const mutation = useMutation(deleteCategory, {
+        onSuccess: () => {
+            queryClient.refetchQueries(["categories"], { active: true })
+        }
+    })
     return (
         <Modal open={open} onClose={() => setOpen(false)}>
             <form onSubmit={(e) => {
                 e.preventDefault();
-                axios.delete(`${process.env.REACT_APP_CATEGORIES_ENDPOINT}/${category.name}`,
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${Cookies.get(JWT_COOKIE)}`
-                        },
-                    }).then((res) => {
-                        setCategories(categories.filter(
-                            (item) =>
-                                item.name !== category.name && item.color !== category.color
-                        ));
-                    }).catch((err) => console.log(err))
+                mutation.mutate(category)
             }}>
                 <ModalDialog sx={{
                     maxWidth: 500,
@@ -35,10 +28,11 @@ export default function DeleteCatModel({ open, setOpen }) {
                     <Typography level='h6' fontWeight="bold" textAlign="center">Delete Category</Typography>
                     <Box>
                         <Typography sx={{ mb: "0.25rem" }}>Category</Typography>
-                        <CustomAutoComplete placeholder='search...' options={categories}
+                        <CustomAutoComplete placeholder='search...' options={isLoading ? [] : categories}
                             sx={{ width: "100%" }}
                             required
                             onChange={(e, value) => setCategory(value)}
+                            loading={isLoading}
                         // value = {name: "", color: "", ?_id: ""}
                         ></CustomAutoComplete>
                     </Box>
