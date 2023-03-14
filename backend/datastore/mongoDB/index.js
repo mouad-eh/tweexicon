@@ -112,6 +112,16 @@ const mongoDataStore = {
             { _id: mongoose.mongo.ObjectId(userId) },
             { $pull: { categories: { name: categoryName } } }
         );
+    },
+    async getPostsCount(userId) {
+        return await Post.countDocuments(
+            { userId: mongoose.mongo.ObjectId(userId) }
+        ).exec()
+    },
+    async getPostsCountInCategory(userId, categoryName) {
+        return await Post.countDocuments(
+            { userId: mongoose.mongo.ObjectId(userId), categoryName }
+        ).exec()
     }
 }
 

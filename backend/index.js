@@ -2,7 +2,7 @@ const express = require("express");
 const { connectToDb } = require("./datastore/index");
 const { signUpHandler, signInHandler } = require("./handlers/authHandlers");
 const { authMiddleWare } = require("./middleware/authMiddleWare");
-const { listPostsHandler, listPostsInCategoryHandler, createPostHandler, deletePostHandler } = require("./handlers/postsHandlers");
+const { listPostsHandler, listPostsInCategoryHandler, createPostHandler, deletePostHandler, getPostsCountHandler, getPostsCountInCategoryHandler } = require("./handlers/postsHandlers");
 const { listCategoriesHandler, createCategoryHandler, deleteCategoryHandler } = require("./handlers/categoriesHandlers")
 const dotenv = require("dotenv");
 const cors = require('cors');
@@ -26,6 +26,8 @@ const proxyHandler = require('./handlers/proxyHandler');
     app.use(authMiddleWare);
 
     //posts
+    app.get("/postscount", getPostsCountHandler);
+    app.get("/postscount/:category", getPostsCountInCategoryHandler);
     app.get("/posts", listPostsHandler);
     app.get("/posts/:category", listPostsInCategoryHandler);
     // app.get("/posts/:id", (req, res) => {

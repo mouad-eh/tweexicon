@@ -44,4 +44,13 @@ async function deletePostHandler(req, res) {
     return res.send({ deletion: "success" });
 }
 
-module.exports = { listPostsHandler, listPostsInCategoryHandler, createPostHandler, deletePostHandler };
+async function getPostsCountHandler(req, res) {
+    const result = await db.getPostsCount(res.locals.userId);
+    return res.send({ count: result });
+}
+
+async function getPostsCountInCategoryHandler(req, res) {
+    const result = await db.getPostsCountInCategory(res.locals.userId, req.params.category);
+    return res.send({ count: result });
+}
+module.exports = { listPostsHandler, listPostsInCategoryHandler, createPostHandler, deletePostHandler, getPostsCountHandler, getPostsCountInCategoryHandler };
