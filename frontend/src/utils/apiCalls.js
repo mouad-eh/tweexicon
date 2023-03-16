@@ -13,9 +13,13 @@ export async function fetchCategories() {
     return res.data;
 }
 
-export async function fetchPosts(params, category) {
+export async function fetchPosts(category, params) {
+    // from axios documentation
+    // NOTE: params that are null or undefined are not rendered in the URL.
+    // so if we don't need to specify, we either call the function without passing params
+    // or we pass null/undefined
     let url = process.env.REACT_APP_POSTS_ENDPOINT;
-    if (category) {
+    if (category !== "all") {
         url = `${url}/${category}`
     }
     const res = await axios.get(url,
@@ -63,4 +67,18 @@ export async function deleteCategory(category) {
             },
         })
     return res;
+}
+export async function fetchPostsCount(category) {
+    let url = `${process.env.REACT_APP_POSTSCOUNT_ENDPOINT}`
+    if (category !== "all") {
+        url = `${url}/${category}`
+    }
+    const res = await axios.get(url,
+        {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${Cookies.get(JWT_COOKIE)}`
+            },
+        })
+    return res.data.count;
 }

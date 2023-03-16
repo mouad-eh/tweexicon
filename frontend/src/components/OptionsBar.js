@@ -7,7 +7,7 @@ import DeleteCatModel from './DeleteCatModel';
 import { fetchCategories } from '../utils/apiCalls';
 import { useQuery } from '@tanstack/react-query';
 
-export default function OptionsBar({ setCategory }) {
+export default function OptionsBar({ setCategory, setCurrentPage }) {
     const [newPostOpen, setNewPostOpen] = useState(false);
     const [deleteCatOpen, setDeleteCatOpen] = useState(false);
     const { isFetched, isLoading, data: categories } = useQuery(['categories'], fetchCategories);
@@ -45,7 +45,10 @@ export default function OptionsBar({ setCategory }) {
                 }}>filter by category:</Typography>
                 <CustomAutoComplete placeholder='filter by category'
                     options={isFetched ? categories : []}
-                    onChange={(e, value) => setCategory(value ? value.name : null)}
+                    onChange={(e, value) => {
+                        setCategory(value ? value.name : "all")
+                        setCurrentPage(1);
+                    }}
                     loading={isLoading}
                 />
             </Box>
