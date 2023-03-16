@@ -34,7 +34,8 @@ export async function fetchPosts(category, params) {
 }
 
 
-export async function fetchPostsHtml(posts) {
+export async function fetchPostsHtml({ queryKey }) {
+    const [_, category, page, posts] = queryKey;
     const postsHtml = await Promise.all(
         posts.map(async (post) => {
             const url = encodeURIComponent(`https://publish.twitter.com/oembed?url=${post.url}&maxwidth=350&omit_script=t`);
@@ -81,4 +82,14 @@ export async function fetchPostsCount(category) {
             },
         })
     return res.data.count;
+}
+
+export async function addPost(post) { //{url,category}
+    const res = await axios.post(process.env.REACT_APP_POSTS_ENDPOINT, post, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${Cookies.get(JWT_COOKIE)}`
+        },
+    })
+    return res.data;
 }

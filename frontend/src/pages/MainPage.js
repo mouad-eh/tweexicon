@@ -32,8 +32,8 @@ export default function MainPage() {
     const { isLoading: isPostsCountLoading, data: postsCount } = useQuery(["postscount", category], () => fetchPostsCount(category))
     const { isLoading: isPostsLoading, data: posts } = useQuery(["posts", category, currentPage], () => fetchPosts(category, params));
     const { isLoading: isPostsHtmlLoading, data: postsHtml } = useQuery(
-        ["posts_html", category, currentPage],
-        () => fetchPostsHtml(posts),
+        ["posts_html", category, currentPage, posts],
+        fetchPostsHtml,
         {
             enabled: !!posts
         })
