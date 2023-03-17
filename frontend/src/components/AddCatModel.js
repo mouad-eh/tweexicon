@@ -11,6 +11,7 @@ export default function AddCatModel({ open, setOpen }) {
     const mutation = useMutation(addCategory, {
         onSuccess: () => {
             queryClient.refetchQueries(['categories'], { active: true })
+            // console.log("categories updated");
         },
     });
 
@@ -23,6 +24,8 @@ export default function AddCatModel({ open, setOpen }) {
         <Modal open={open} onClose={() => setOpen(false)}>
             <form onSubmit={(e) => {
                 e.preventDefault();
+                //to stop submit event trigerring in AddPostModel
+                e.stopPropagation();
                 mutation.mutate({ name, color });
             }}>
                 <ModalDialog sx={{

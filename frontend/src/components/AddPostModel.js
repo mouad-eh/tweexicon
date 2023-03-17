@@ -15,25 +15,14 @@ export default function AddPostModel({ open, setOpen }) {
     const { isLoading, data: categories } = useQuery(['categories'], fetchCategories);
     // 
     const mutation = useMutation(addPost, {
-        onSuccess: () => {
-            var globalCount;
-            var categoryCount;
-            // update counts of all posts
-            queryClient.setQueryData(["postscount", category.name], (count) => {
-                categoryCount = count + 1
-                return count + 1
-            })
-            // update counts of pots within the same category
-            queryClient.setQueriesData(["postscount", "all"], (count) => {
-                globalCount = count + 1
-                return count + 1
-            })
-            // refetch last page of posts
-            queryClient.refetchQueries(["posts", "all", Math.ceil(globalCount / 5)], { exact: true })
-            // refetch last page of posts of the category
-            queryClient.refetchQueries(["posts", category.name, Math.ceil(categoryCount / 5)], { exact: true })
-            queryClient.refetchQueries(["posts_html", category.name, Math.ceil(categoryCount / 5)], { exact: true })
-            console.log("post added successfully");
+        onSuccess: (data) => {
+            queryClient.refetchQueries(["postscount", "all"], { active: true });
+            queryClient.refetchQueries(["postscount", data.categoryName], { active: true });
+            queryClient.refetchQueries(["posts", "all"], { active: true })
+            queryClient.refetchQueries(["posts", data.categoryName], { active: true });
+            queryClient.refetchQueries(["posts_html", "all"], { active: true })
+            queryClient.refetchQueries(["posts_html", data.categoryName], { active: true });
+            console.log("post added");
         }
     })
 
@@ -42,7 +31,7 @@ export default function AddPostModel({ open, setOpen }) {
             <form
                 onSubmit={(e) => {
                     e.preventDefault();
-                    mutation.mutate({ url, categoryName: category.name })
+                    mutation.mutate({ url, categoryName: category.name ? category.name : null })
                 }}
             >
                 <ModalDialog sx={{

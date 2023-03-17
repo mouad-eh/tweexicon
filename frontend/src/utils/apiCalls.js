@@ -34,8 +34,7 @@ export async function fetchPosts(category, params) {
 }
 
 
-export async function fetchPostsHtml({ queryKey }) {
-    const [_, category, page, posts] = queryKey;
+export async function fetchPostsHtml(posts) {
     const postsHtml = await Promise.all(
         posts.map(async (post) => {
             const url = encodeURIComponent(`https://publish.twitter.com/oembed?url=${post.url}&maxwidth=350&omit_script=t`);

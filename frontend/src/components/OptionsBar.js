@@ -7,7 +7,7 @@ import DeleteCatModel from './DeleteCatModel';
 import { fetchCategories } from '../utils/apiCalls';
 import { useQuery } from '@tanstack/react-query';
 
-export default function OptionsBar({ setCategory, setCurrentPage }) {
+export default function OptionsBar({ setCategory, setPageData }) {
     const [newPostOpen, setNewPostOpen] = useState(false);
     const [deleteCatOpen, setDeleteCatOpen] = useState(false);
     const { isFetched, isLoading, data: categories } = useQuery(['categories'], fetchCategories);
@@ -47,7 +47,11 @@ export default function OptionsBar({ setCategory, setCurrentPage }) {
                     options={isFetched ? categories : []}
                     onChange={(e, value) => {
                         setCategory(value ? value.name : "all")
-                        setCurrentPage(1);
+                        // setCurrentPage(1);
+                        setPageData({
+                            num: 1,
+                            params: null
+                        })
                     }}
                     loading={isLoading}
                 />

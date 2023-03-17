@@ -5,8 +5,8 @@ import MainPage from './pages/MainPage';
 import { Routes, Route } from 'react-router-dom';
 import AuthProtected from './components/AuthProtected';
 import { SIGNIN_PATH, SIGNUP_PATH, HOME_PATH, queryClient } from './utils/constants';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 
 function App() {
@@ -17,7 +17,11 @@ function App() {
           <Route path='/' element={<SignInPage />} />
           <Route path={SIGNIN_PATH} element={<SignInPage />} />
           <Route path={SIGNUP_PATH} element={<SignUpPage />} />
-          <Route path={HOME_PATH} element={<AuthProtected><MainPage /></AuthProtected>} />
+          <Route path={HOME_PATH} element={
+            <AuthProtected>
+              <MainPage />
+            </AuthProtected>
+          } />
         </Routes>
         <ReactQueryDevtools></ReactQueryDevtools>
       </QueryClientProvider>

@@ -4,7 +4,7 @@ import Logout from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import jwt from 'jwt-decode';
-import { JWT_COOKIE } from '../utils/constants';
+import { JWT_COOKIE, queryClient } from '../utils/constants';
 
 
 
@@ -44,6 +44,7 @@ export default function AuthHeader() {
                 </Typography>
                 <Link to='/' style={{ textDecoration: 'none' }}>
                     <Button color='primary' variant='solid' startDecorator={<Logout />} onClick={() => {
+                        queryClient.clear();
                         const payload = jwt(Cookies.get(JWT_COOKIE));
                         Cookies.remove(JWT_COOKIE, {
                             path: '/',

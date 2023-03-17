@@ -10,7 +10,12 @@ export default function DeleteCatModel({ open, setOpen }) {
     const { isLoading, data: categories } = useQuery(['categories'], fetchCategories);
     const mutation = useMutation(deleteCategory, {
         onSuccess: () => {
-            queryClient.refetchQueries(["categories"], { active: true })
+            queryClient.refetchQueries(["categories"])
+            queryClient.refetchQueries(["postscount", "all"], { active: true });
+            queryClient.refetchQueries(["postscount", category], { active: true });
+            queryClient.refetchQueries(["posts", "all"], { active: true })
+            queryClient.refetchQueries(["posts", category], { active: true });
+            // console.log("categories updated");
         }
     })
     return (

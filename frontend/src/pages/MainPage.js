@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import AuthHeader from '../components/AuthHeader';
 import OptionsBar from '../components/OptionsBar';
 import PageNavigation from '../components/PageNavigation';
@@ -8,32 +8,19 @@ import './MainPage.css';
 import { useQuery } from '@tanstack/react-query';
 import { CircularProgress } from '@mui/joy';
 import { fetchPosts, fetchPostsCount, fetchPostsHtml } from '../utils/apiCalls';
-import { queryClient } from '../utils/constants';
-import { usePrevious } from '../utils/customHooks';
 
 export default function MainPage() {
     const [category, setCategory] = useState("all");
-    const [currentPage, setCurrentPage] = useState(1);
-    const previousPage = usePrevious(currentPage);
-
-    // getting params of the upcomming posts query
-    let params = null;
-    if (currentPage !== 1) {
-        const previousPosts = queryClient.getQueryData(["posts"], { active: true, exact: false });
-        const dir = previousPage < currentPage ? "next" : "previous";
-        let cursor = dir === "next" ? previousPosts[previousPosts.length - 1]._id : previousPosts[0]._id;
-        params = {
-            cursor,
-            limit: 5,
-            dir
-        }
-    }
+    const [pageData, setPageData] = useState({
+        num: 1,
+        params: null
+    });
 
     const { isLoading: isPostsCountLoading, data: postsCount } = useQuery(["postscount", category], () => fetchPostsCount(category))
-    const { isLoading: isPostsLoading, data: posts } = useQuery(["posts", category, currentPage], () => fetchPosts(category, params));
+    const { isLoading: isPostsLoading, data: posts } = useQuery(["posts", category, pageData.num], () => fetchPosts(category, pageData.params));
     const { isLoading: isPostsHtmlLoading, data: postsHtml } = useQuery(
-        ["posts_html", category, currentPage, posts],
-        fetchPostsHtml,
+        ["posts_html", category, pageData.num, posts],
+        () => fetchPostsHtml(posts),
         {
             enabled: !!posts
         })
@@ -45,11 +32,12 @@ export default function MainPage() {
             flexDirection: "column"
         }}>
             <AuthHeader></AuthHeader>
-            <OptionsBar setCategory={setCategory} setCurrentPage={setCurrentPage}></OptionsBar>
+            <OptionsBar setCategory={setCategory} setPageData={setPageData}></OptionsBar>
             {isPostsHtmlLoading ? <CircularProgress /> : <PostsGrid postsHtml={postsHtml}></PostsGrid>}
             <PageNavigation
-                page={currentPage}
-                setPage={setCurrentPage}
+                pageData={pageData}
+                setPageData={setPageData}
+                posts={posts}
                 postsCount={isPostsCountLoading ? 10000 : postsCount}
             ></PageNavigation>
         </Sheet>
