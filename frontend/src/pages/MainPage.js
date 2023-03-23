@@ -6,7 +6,7 @@ import PostsGrid from '../components/PostsGrid';
 import Sheet from '@mui/joy/Sheet';
 import './MainPage.css';
 import { useQuery } from '@tanstack/react-query';
-import { CircularProgress } from '@mui/joy';
+import { Box, CircularProgress } from '@mui/joy';
 import { fetchPosts, fetchPostsCount, fetchPostsHtml } from '../utils/apiCalls';
 import { SnackbarProvider } from 'notistack';
 
@@ -27,7 +27,7 @@ export default function MainPage() {
         })
 
     return (
-        <SnackbarProvider autoHideDuration={2000}
+        <SnackbarProvider autoHideDuration={3000}
             anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'center'
@@ -36,16 +36,23 @@ export default function MainPage() {
             <Sheet sx={{ //stick footer to the bottom
                 minHeight: "100vh",
                 display: "flex",
-                flexDirection: "column"
+                flexDirection: "column",
+                justifyContent: "space-between",
+                gap: "1rem"
             }}>
-                <AuthHeader></AuthHeader>
-                <OptionsBar setCategory={setCategory} setPageData={setPageData}></OptionsBar>
-                {isPostsHtmlLoading ? <CircularProgress /> : <PostsGrid postsHtml={postsHtml}></PostsGrid>}
+                <Box>
+                    <AuthHeader></AuthHeader>
+                    <OptionsBar setCategory={setCategory} setPageData={setPageData}></OptionsBar>
+                </Box>
+                {isPostsHtmlLoading ?
+                    <CircularProgress sx={{ mx: "auto" }} /> :
+                    <PostsGrid postsHtml={postsHtml}></PostsGrid>}
                 <PageNavigation
                     pageData={pageData}
                     setPageData={setPageData}
                     posts={posts}
                     postsCount={isPostsCountLoading ? 10000 : postsCount}
+                    applyMarginTop={!isPostsHtmlLoading}
                 ></PageNavigation>
             </Sheet>
         </SnackbarProvider>

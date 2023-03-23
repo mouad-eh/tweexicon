@@ -1,3 +1,4 @@
+import { Typography } from '@mui/joy';
 import Box from '@mui/joy/Box';
 import Sheet from '@mui/joy/Sheet';
 import React, { useEffect } from 'react';
@@ -34,7 +35,7 @@ export default function PostsGrid({ postsHtml }) {
 
     return (
         <Sheet sx={{
-            my: "1rem",
+            // my: "1rem",
             display: "flex",
             justifyContent: "center",
             gap: "1rem",
@@ -42,16 +43,24 @@ export default function PostsGrid({ postsHtml }) {
         }}
             className='masonry'
         >
-            <Masonry
-                breakpointCols={postsHtml.length > 2 ? breakpointCols1 : breakpointCols2}
-                className="my-masonry-grid"
-                columnClassName="my-masonry-grid_column">
-                {
-                    postsHtml.map((htmlstr, ind) => (
-                        <Box key={ind} dangerouslySetInnerHTML={createMarkup(htmlstr)}></Box>
-                    ))
-                }
-            </Masonry>
+            {
+                postsHtml.length === 0 ?
+                    <Box sx={{ textAlign: "center" }}>
+                        <Typography level='body2' sx={{ fontSize: "1.5rem" }}>No posts yet !</Typography>
+                        <Typography level='body2'>looks like you have not added any posts.</Typography>
+                    </Box>
+                    :
+                    <Masonry
+                        breakpointCols={postsHtml.length > 2 ? breakpointCols1 : breakpointCols2}
+                        className="my-masonry-grid"
+                        columnClassName="my-masonry-grid_column">
+                        {
+                            postsHtml.map((htmlstr, ind) => (
+                                <Box key={ind} dangerouslySetInnerHTML={createMarkup(htmlstr)}></Box>
+                            ))
+                        }
+                    </Masonry>
+            }
         </Sheet>
     )
 }
