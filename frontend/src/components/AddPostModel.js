@@ -6,6 +6,7 @@ import CustomAutoComplete from './CustomAutoComplete';
 import { addPost, fetchCategories } from '../utils/apiCalls';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../utils/constants';
+import { useSnackbar } from 'notistack';
 
 export default function AddPostModel({ open, setOpen }) {
     const [url, setUrl] = useState("");
@@ -14,6 +15,8 @@ export default function AddPostModel({ open, setOpen }) {
     const [newCatOpen, setNewCatOpen] = useState(false);
     const { isLoading, data: categories } = useQuery(['categories'], fetchCategories);
     // 
+    const { enqueueSnackbar } = useSnackbar();
+
     const mutation = useMutation(addPost, {
         onSuccess: (data) => {
             queryClient.refetchQueries(["postscount", "all"], { active: true });
@@ -22,7 +25,13 @@ export default function AddPostModel({ open, setOpen }) {
             queryClient.refetchQueries(["posts", data.categoryName], { active: true });
             queryClient.refetchQueries(["posts_html", "all"], { active: true })
             queryClient.refetchQueries(["posts_html", data.categoryName], { active: true });
-            console.log("post added");
+            // close the model
+            setOpen(false);
+            // display success messag 
+            enqueueSnackbar('Post added successfully!', { variant: "success" });
+        },
+        onError: (error) => {
+            console.log(error)
         }
     })
 
@@ -62,6 +71,7 @@ export default function AddPostModel({ open, setOpen }) {
                             name="url"
                             type="text"
                             placeholder="url"
+                            required
                             onChange={(e) => setUrl(e.target.value)}
                         />
                     </FormControl>
@@ -82,6 +92,7 @@ export default function AddPostModel({ open, setOpen }) {
                         }}>
                             <CustomAutoComplete placeholder='search...' options={isLoading ? [] : categories}
                                 loading={isLoading}
+                                required
                                 sx={{
                                     width: {
                                         xs: "100%",

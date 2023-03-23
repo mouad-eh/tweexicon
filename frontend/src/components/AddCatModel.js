@@ -11,10 +11,9 @@ export default function AddCatModel({ open, setOpen }) {
     const mutation = useMutation(addCategory, {
         onSuccess: () => {
             queryClient.refetchQueries(['categories'], { active: true })
-            // console.log("categories updated");
+            setOpen(false);
         },
     });
-
 
     const handleChange = (color) => {
         setColor(color.hex);
@@ -54,6 +53,7 @@ export default function AddCatModel({ open, setOpen }) {
                             type="text"
                             placeholder="category name"
                             value={name}
+                            required
                             onChange={(e) => setName(e.target.value)}
                         />
                     </FormControl>

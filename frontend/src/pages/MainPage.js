@@ -8,6 +8,7 @@ import './MainPage.css';
 import { useQuery } from '@tanstack/react-query';
 import { CircularProgress } from '@mui/joy';
 import { fetchPosts, fetchPostsCount, fetchPostsHtml } from '../utils/apiCalls';
+import { SnackbarProvider } from 'notistack';
 
 export default function MainPage() {
     const [category, setCategory] = useState("all");
@@ -26,20 +27,27 @@ export default function MainPage() {
         })
 
     return (
-        <Sheet sx={{ //stick footer to the bottom
-            minHeight: "100vh",
-            display: "flex",
-            flexDirection: "column"
-        }}>
-            <AuthHeader></AuthHeader>
-            <OptionsBar setCategory={setCategory} setPageData={setPageData}></OptionsBar>
-            {isPostsHtmlLoading ? <CircularProgress /> : <PostsGrid postsHtml={postsHtml}></PostsGrid>}
-            <PageNavigation
-                pageData={pageData}
-                setPageData={setPageData}
-                posts={posts}
-                postsCount={isPostsCountLoading ? 10000 : postsCount}
-            ></PageNavigation>
-        </Sheet>
+        <SnackbarProvider autoHideDuration={2000}
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center'
+            }}
+        >
+            <Sheet sx={{ //stick footer to the bottom
+                minHeight: "100vh",
+                display: "flex",
+                flexDirection: "column"
+            }}>
+                <AuthHeader></AuthHeader>
+                <OptionsBar setCategory={setCategory} setPageData={setPageData}></OptionsBar>
+                {isPostsHtmlLoading ? <CircularProgress /> : <PostsGrid postsHtml={postsHtml}></PostsGrid>}
+                <PageNavigation
+                    pageData={pageData}
+                    setPageData={setPageData}
+                    posts={posts}
+                    postsCount={isPostsCountLoading ? 10000 : postsCount}
+                ></PageNavigation>
+            </Sheet>
+        </SnackbarProvider>
     )
 }
