@@ -1,4 +1,4 @@
-import { FormControl, FormLabel, Input, Modal, ModalDialog, Typography, Button } from '@mui/joy';
+import { FormControl, FormLabel, Input, Modal, ModalDialog, Typography, Button, ModalClose } from '@mui/joy';
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
@@ -35,6 +35,17 @@ export default function AddCatModel({ open, setOpen }) {
 
                     gap: "1rem"
                 }} >
+                    <ModalClose
+                        variant="outlined"
+                        size='sm'
+                        sx={{
+                            top: 'calc(-1/4 * var(--IconButton-size))',
+                            right: 'calc(-1/4 * var(--IconButton-size))',
+                            boxShadow: '0 2px 12px 0 rgba(0 0 0 / 0.2)',
+                            borderRadius: '50%',
+                            bgcolor: 'background.body',
+                        }}
+                    />
                     <Typography level='h6' fontWeight="bold" textAlign="center">Add Category</Typography>
                     <FormControl>
                         <FormLabel>Name</FormLabel>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, FormControl, FormLabel, Input, Modal, ModalDialog, Typography } from '@mui/joy';
+import { Box, Button, FormControl, FormLabel, Input, Modal, ModalClose, ModalDialog, Typography } from '@mui/joy';
 import Add from '@mui/icons-material/Add';
 import AddCatModel from './AddCatModel';
 import CustomAutoComplete from './CustomAutoComplete';
@@ -44,6 +44,17 @@ export default function AddPostModel({ open, setOpen }) {
                     flexDirection: "column",
                     gap: "1rem"
                 }}>
+                    <ModalClose
+                        variant="outlined"
+                        size='sm'
+                        sx={{
+                            top: 'calc(-1/4 * var(--IconButton-size))',
+                            right: 'calc(-1/4 * var(--IconButton-size))',
+                            boxShadow: '0 2px 12px 0 rgba(0 0 0 / 0.2)',
+                            borderRadius: '50%',
+                            bgcolor: 'background.body',
+                        }}
+                    />
                     <Typography level='h6' fontWeight="bold" textAlign="center">Add Post</Typography>
                     <FormControl>
                         <FormLabel>URL</FormLabel>

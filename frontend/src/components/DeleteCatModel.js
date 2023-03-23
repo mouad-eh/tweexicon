@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Modal, ModalDialog, Typography } from '@mui/joy';
+import { Box, Button, Modal, ModalClose, ModalDialog, Typography } from '@mui/joy';
 import CustomAutoComplete from './CustomAutoComplete';
 import { queryClient } from '../utils/constants';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -30,6 +30,17 @@ export default function DeleteCatModel({ open, setOpen }) {
                     flexDirection: "column",
                     gap: "2rem"
                 }} >
+                    <ModalClose
+                        variant="outlined"
+                        size='sm'
+                        sx={{
+                            top: 'calc(-1/4 * var(--IconButton-size))',
+                            right: 'calc(-1/4 * var(--IconButton-size))',
+                            boxShadow: '0 2px 12px 0 rgba(0 0 0 / 0.2)',
+                            borderRadius: '50%',
+                            bgcolor: 'background.body',
+                        }}
+                    />
                     <Typography level='h6' fontWeight="bold" textAlign="center">Delete Category</Typography>
                     <Box>
                         <Typography sx={{ mb: "0.25rem" }}>Category</Typography>
