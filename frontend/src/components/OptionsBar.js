@@ -47,7 +47,6 @@ export default function OptionsBar({ setCategory, setPageData }) {
                     options={isFetched ? categories : []}
                     onChange={(e, value) => {
                         setCategory(value ? value.name : "all")
-                        // setCurrentPage(1);
                         setPageData({
                             num: 1,
                             params: null
@@ -65,7 +64,7 @@ export default function OptionsBar({ setCategory, setPageData }) {
                 <Button color='danger' variant='soft' startDecorator={<Delete />} onClick={() => setDeleteCatOpen(true)}>Delete Category</Button>
             </Box>
             <AddPostModel open={newPostOpen} setOpen={setNewPostOpen}></AddPostModel>
-            <DeleteCatModel open={deleteCatOpen} setOpen={setDeleteCatOpen}></DeleteCatModel>
+            <DeleteCatModel open={deleteCatOpen} setOpen={setDeleteCatOpen} setSearchCategory={setCategory} setPageData={setPageData} ></DeleteCatModel>
         </Sheet>
     )
 }

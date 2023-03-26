@@ -4,18 +4,24 @@ import CustomAutoComplete from './CustomAutoComplete';
 import { queryClient } from '../utils/constants';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { deleteCategory, fetchCategories } from '../utils/apiCalls';
+import { useSnackbar } from 'notistack';
 
-export default function DeleteCatModel({ open, setOpen }) {
+export default function DeleteCatModel({ open, setOpen, setSearchCategory, setPageData }) {
     const [category, setCategory] = useState({});
     const { isLoading, data: categories } = useQuery(['categories'], fetchCategories);
+    const { enqueueSnackbar } = useSnackbar();
     const mutation = useMutation(deleteCategory, {
         onSuccess: () => {
-            queryClient.refetchQueries(["categories"])
-            queryClient.refetchQueries(["postscount", "all"], { active: true });
-            queryClient.refetchQueries(["postscount", category], { active: true });
-            queryClient.refetchQueries(["posts", "all"], { active: true })
-            queryClient.refetchQueries(["posts", category], { active: true });
-            // console.log("categories updated");
+            queryClient.refetchQueries(["categories"], { active: true });
+            setSearchCategory("all");
+            setPageData({
+                num: 1,
+                params: null
+            });
+            setOpen(false);
+            enqueueSnackbar("Category deleted successfully !", { variant: "success" });
+            //the search bar can't be cleared after deleting a category
+            //cuz there is no direct way to that
         }
     })
     return (
@@ -51,10 +57,11 @@ export default function DeleteCatModel({ open, setOpen }) {
                             loading={isLoading}
                         // value = {name: "", color: "", ?_id: ""}
                         ></CustomAutoComplete>
+                        <Typography level='body3' sx={{ mt: "0.25rem" }}>Note: All the posts of a deleted category will be moved to the default category.</Typography>
                     </Box>
                     <Button color='danger' variant='soft' type='submit'>Delete</Button>
                 </ModalDialog>
             </form>
-        </Modal >
+        </Modal>
     )
 }
