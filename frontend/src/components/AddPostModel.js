@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, FormControl, FormLabel, Input, Modal, ModalClose, ModalDialog, Typography } from '@mui/joy';
 import Add from '@mui/icons-material/Add';
 import AddCatModel from './AddCatModel';
@@ -7,9 +7,14 @@ import { addPost, fetchCategories } from '../utils/apiCalls';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../utils/constants';
 import { useSnackbar } from 'notistack';
+import { isValidTweetUrl } from '../utils/helperFuncs';
 
 export default function AddPostModel({ open, setOpen }) {
     const [url, setUrl] = useState("");
+    useEffect(() => {
+        setInvalidTweetUrl(false);
+    }, [url]);
+    const [invalidTweetUrl, setInvalidTweetUrl] = useState(false);
     const [category, setCategory] = useState(null);
     // 
     const [newCatOpen, setNewCatOpen] = useState(false);
@@ -23,8 +28,6 @@ export default function AddPostModel({ open, setOpen }) {
             queryClient.refetchQueries(["postscount", data.categoryName], { active: true });
             queryClient.refetchQueries(["posts", "all"], { active: true })
             queryClient.refetchQueries(["posts", data.categoryName], { active: true });
-            queryClient.refetchQueries(["posts_html", "all"], { active: true })
-            queryClient.refetchQueries(["posts_html", data.categoryName], { active: true });
             // close the model
             setOpen(false);
             // display success messag 
@@ -40,7 +43,8 @@ export default function AddPostModel({ open, setOpen }) {
             <form
                 onSubmit={(e) => {
                     e.preventDefault();
-                    mutation.mutate({ url, categoryName: category.name ? category.name : null })
+                    if (!isValidTweetUrl(url)) setInvalidTweetUrl(true);
+                    else mutation.mutate({ url, categoryName: category.name ? category.name : null })
                 }}
             >
                 <ModalDialog sx={{
@@ -71,9 +75,11 @@ export default function AddPostModel({ open, setOpen }) {
                             name="url"
                             type="text"
                             placeholder="url"
+                            color={invalidTweetUrl ? 'danger' : 'neutral'}
                             required
                             onChange={(e) => setUrl(e.target.value)}
                         />
+                        {invalidTweetUrl ? <Typography level='body2' color='danger'>invalid tweet URL, try again.</Typography> : null}
                     </FormControl>
                     <FormControl>
                         <FormLabel sx={{ mb: "0.25rem" }}>Category</FormLabel>
