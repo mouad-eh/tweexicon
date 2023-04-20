@@ -8,6 +8,7 @@ import { SIGNIN_PATH, SIGNUP_PATH, HOME_PATH, queryClient } from './utils/consta
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import AlreadyLoggedIn from './components/AlreadyLoggedIn';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 
 function App() {
@@ -31,9 +32,12 @@ function App() {
             </AlreadyLoggedIn>
           } />
           <Route path={HOME_PATH} element={
-            <AuthProtected>
-              <MainPage />
-            </AuthProtected>
+            //AuthProtected is wrapped with an ErrorBoundary to handle token expiration error
+            <ErrorBoundary>
+              <AuthProtected>
+                <MainPage />
+              </AuthProtected>
+            </ErrorBoundary>
           } />
         </Routes>
         <ReactQueryDevtools></ReactQueryDevtools>
