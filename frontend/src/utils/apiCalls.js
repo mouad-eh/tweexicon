@@ -33,7 +33,8 @@ export async function fetchPosts(category, params) {
     return res.data;
 }
 
-
+//there is no need for this function as we are fetching tweets dynamically using factory function
+//the reason is still kept in the codebase is that it might be helpful if we want to implement full text search later
 export async function fetchPostsHtml(posts) {
     const postsHtml = await Promise.all(
         posts.map(async (post) => {

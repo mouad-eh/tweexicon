@@ -2,64 +2,59 @@ import { Typography } from '@mui/joy';
 import Box from '@mui/joy/Box';
 import Sheet from '@mui/joy/Sheet';
 import React, { useEffect } from 'react';
-import Masonry from 'react-masonry-css';
 
-
-function createMarkup(html) {
-    return { __html: html };
+function getIdFromUrl(url) {
+    const tweetIdRegex = /\/status\/(\d+)/;
+    const tweetId = url.match(tweetIdRegex)[1];
+    return tweetId;
 }
 
-
-const breakpointCols1 = {
-    default: 3,
-    1200: 3,
-    1100: 2,
-    750: 1
-}
-
-const breakpointCols2 = {
-    default: 2,
-    1200: 2,
-    1100: 2,
-    750: 1
-}
-
-export default function PostsGrid({ postsHtml }) {
+export default function PostsGrid({ posts }) {
 
     useEffect(() => {
-        window.twttr.widgets.load(
-            document.getElementsByClassName("my-masonry-grid")[0]
-        );
-    })
+        const parentContainer = document.getElementById('container');
+        if (parentContainer) parentContainer.innerHTML = '';
+        for (let post of posts) {
+            const id = getIdFromUrl(post.url)
+            window.twttr.widgets.createTweet(
+                id,
+                parentContainer,
+                {
+                    width: 350,
+                    dnt: true
+                }
+            ).then((tweet) => {
+                //the fulfillement value of the promise is the html element representing the tweet
+                //if tweet does not exists (deleted, deleted account...etc) undefined is returned
+                if (tweet) {
+                    tweet.style.marginTop = "";
+                    tweet.style.marginBottom = "";
+                }
+            })
+        }
+    }, [posts])
 
 
     return (
-        <Sheet sx={{
-            // my: "1rem",
-            display: "flex",
-            justifyContent: "center",
-            gap: "1rem",
-            alignItems: "center"
-        }}
-            className='masonry'
-        >
+        <Sheet sx={{ mx: "auto" }}>
             {
-                postsHtml.length === 0 ?
+                posts.length === 0 ?
                     <Box sx={{ textAlign: "center" }}>
                         <Typography level='body2' sx={{ fontSize: "1.5rem" }}>No posts yet !</Typography>
                         <Typography level='body2'>looks like you have not added any posts.</Typography>
                     </Box>
                     :
-                    <Masonry
-                        breakpointCols={postsHtml.length > 2 ? breakpointCols1 : breakpointCols2}
-                        className="my-masonry-grid"
-                        columnClassName="my-masonry-grid_column">
-                        {
-                            postsHtml.map((htmlstr, ind) => (
-                                <Box key={ind} dangerouslySetInnerHTML={createMarkup(htmlstr)}></Box>
-                            ))
-                        }
-                    </Masonry>
+                    <Sheet id="container" sx={{
+                        columnCount: {
+                            xs: 1,
+                            sm: 1,
+                            md: 2,
+                            lg: 3
+                        },
+                        columnWidth: "350px",
+                        columnGap: "1rem"
+                    }}>
+                    </Sheet>
             }
         </Sheet>
     )
