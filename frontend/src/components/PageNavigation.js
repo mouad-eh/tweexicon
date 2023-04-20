@@ -4,14 +4,13 @@ import Button from '@mui/joy/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 
-export default function PageNavigation({ pageData, setPageData, posts, postsCount, applyMarginTop }) {
+export default function PageNavigation({ pageData, setPageData, posts, postsCount }) {
     return (
         <Sheet sx={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             gap: "0.25rem",
-            // mt: applyMarginTop ? "auto" : 0,//stick footer to the bottom
             mb: "1rem"
         }}>
             <Button variant='outlined' startDecorator={<KeyboardArrowLeft />}

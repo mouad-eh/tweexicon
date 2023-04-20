@@ -12,25 +12,7 @@ code {
     monospace;
 }
 
-.my-masonry-grid {
-  display: -webkit-box;
-  /* Not needed if autoprefixing */
-  display: -ms-flexbox;
-  /* Not needed if autoprefixing */
-  display: flex;
-  margin-left: -1.5rem;
-  /* gutter size offset */
-  width: auto;
-}
-
-.my-masonry-grid_column {
-  padding-left: 1.5rem;
-  /* gutter size */
-  background-clip: padding-box;
-}
-
-/* Style your items */
-.my-masonry-grid_column>div {
-  /* change div to reference your elements you put in <Masonry> */
-  margin-bottom: 1.5rem;
+.twitter-tweet {
+  margin-bottom: 1rem;
+  /* break-inside: avoid; */
 }
