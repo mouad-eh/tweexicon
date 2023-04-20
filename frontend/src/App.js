@@ -7,6 +7,7 @@ import AuthProtected from './components/AuthProtected';
 import { SIGNIN_PATH, SIGNUP_PATH, HOME_PATH, queryClient } from './utils/constants';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import AlreadyLoggedIn from './components/AlreadyLoggedIn';
 
 
 function App() {
@@ -14,9 +15,21 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <Routes>
-          <Route path='/' element={<SignInPage />} />
-          <Route path={SIGNIN_PATH} element={<SignInPage />} />
-          <Route path={SIGNUP_PATH} element={<SignUpPage />} />
+          <Route path='/' element={
+            <AlreadyLoggedIn>
+              <SignInPage />
+            </AlreadyLoggedIn>
+          } />
+          <Route path={SIGNIN_PATH} element={
+            <AlreadyLoggedIn>
+              <SignInPage />
+            </AlreadyLoggedIn>
+          } />
+          <Route path={SIGNUP_PATH} element={
+            <AlreadyLoggedIn>
+              <SignUpPage />
+            </AlreadyLoggedIn>
+          } />
           <Route path={HOME_PATH} element={
             <AuthProtected>
               <MainPage />

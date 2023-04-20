@@ -3,14 +3,25 @@ import Cookies from "js-cookie";
 import { JWT_COOKIE } from "./constants";
 
 export async function fetchCategories() {
-    const res = await axios.get(process.env.REACT_APP_CATEGORIES_ENDPOINT,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${Cookies.get(JWT_COOKIE)}`
-            }
-        })
-    return res.data;
+    // handle user logout from another tab
+    // if user logout from another tab, somehow many fetching action are triggered
+    // and fetchCategories is one of them
+    try {
+        const res = await axios.get(process.env.REACT_APP_CATEGORIES_ENDPOINT,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${Cookies.get(JWT_COOKIE)}`
+                }
+            })
+        return res.data;
+    } catch (error) {
+        if (error.response.data.error.name === "JsonWebTokenError") {
+            //sending a request with Authorization header = 'Bearer undefined' is the reason behind this error
+            //a redirection is made to the root route and the rest is handled by AlreadyLoggedIn component
+            window.location = '/';
+        }
+    }
 }
 
 export async function fetchPosts(category, params) {
