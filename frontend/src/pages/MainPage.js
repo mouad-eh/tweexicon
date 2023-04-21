@@ -31,14 +31,21 @@ export default function MainPage() {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                gap: "1rem"
+                gap: "1rem",
+                position: "relative"
             }}>
                 <Box>
                     <AuthHeader></AuthHeader>
                     <OptionsBar setCategory={setCategory} setPageData={setPageData}></OptionsBar>
                 </Box>
                 {isPostsLoading ?
-                    <CircularProgress sx={{ mx: "auto" }} /> :
+                    <CircularProgress sx={{
+                        position: "fixed",
+                        top: "50%",
+                        left: "50%",
+                        marginLeft: "-20px",
+                        marginTop: "-20px"
+                    }} /> :
                     <PostsGrid posts={posts}></PostsGrid>}
                 <PageNavigation
                     pageData={pageData}
