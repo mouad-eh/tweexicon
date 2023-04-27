@@ -27,7 +27,11 @@ export default function AuthHeader() {
             alignItems: "center",
             boxShadow: "sm"
         }} >
-            <Typography level='h5' fontWeight="bold" sx={{ color: "primary.500" }}>tweexicon</Typography>
+            <Typography level='h5' fontWeight="bold" sx={{ color: "primary.500" }}>
+                <Link to='/' style={{ textDecoration: 'none', color: "inherit" }}>
+                    tweexicon
+                </Link>
+            </Typography>
             <Box sx={{
                 display: "flex",
                 alignItems: "center",
@@ -56,6 +60,6 @@ export default function AuthHeader() {
                     </Button>
                 </Link>
             </Box>
-        </Sheet>
+        </Sheet >
     )
 }

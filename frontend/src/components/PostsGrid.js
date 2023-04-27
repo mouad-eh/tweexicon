@@ -8,7 +8,6 @@ export default function PostsGrid({ posts }) {
     useEffect(() => {
         const parentContainer = document.getElementById('container');
         if (parentContainer) parentContainer.innerHTML = '';
-        const tweetPromises = [];
         for (let post of posts) {
             const id = getIdFromUrl(post.url);
             window.twttr.widgets.createTweet(

@@ -15,7 +15,11 @@ export default function Header() {
             alignItems: "center",
             boxShadow: "sm"
         }} >
-            <Typography level='h5' fontWeight="bold" sx={{ color: "primary.500" }}>tweexicon</Typography>
+            <Typography level='h5' fontWeight="bold" sx={{ color: "primary.500" }}>
+                <Link to='/' style={{ textDecoration: 'none', color: "inherit" }}>
+                    tweexicon
+                </Link>
+            </Typography>
             <div>
                 <Link to={SIGNUP_PATH} style={{ textDecoration: "none" }}>
                     <Button sx={{ mr: "0.5rem" }} color='primary' variant='solid'>Sign up</Button>

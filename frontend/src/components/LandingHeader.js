@@ -13,7 +13,9 @@ const Navbar = () => {
             boxShadow: "sm"
         }}>
             <Typography level="h5" fontWeight="bold" sx={{ color: 'white' }}>
-                tweexicon
+                <Link to='/' style={{ textDecoration: 'none', color: "inherit" }}>
+                    tweexicon
+                </Link>
             </Typography>
             <Box >
                 <Link to={SIGNUP_PATH} style={{ textDecoration: "none" }}>

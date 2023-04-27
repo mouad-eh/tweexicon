@@ -1,6 +1,6 @@
 import { Sheet, Typography } from '@mui/joy'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from '@mui/joy'
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 export default function LandingFooter() {
@@ -37,7 +37,7 @@ export default function LandingFooter() {
                 <Typography level='body1'>made with</Typography>
                 <FavoriteIcon fontSize='small' sx={{ color: "red" }}></FavoriteIcon>
                 <Typography level='body1'>by{' '}
-                    <Link to='https://github.com/mouad-eh'>@mouad-eh</Link>
+                    <Link underline="hover" href='https://github.com/mouad-eh' sx={{ color: "primary.500" }}>@mouad-eh</Link>
                 </Typography>
             </Sheet>
         </Sheet>
