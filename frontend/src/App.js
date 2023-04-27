@@ -9,6 +9,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import AlreadyLoggedIn from './components/AlreadyLoggedIn';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import LandingPage from './pages/LandingPage';
 
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
         <Routes>
           <Route path='/' element={
             <AlreadyLoggedIn>
-              <SignInPage />
+              <LandingPage />
             </AlreadyLoggedIn>
           } />
           <Route path={SIGNIN_PATH} element={
@@ -40,7 +41,7 @@ function App() {
             </ErrorBoundary>
           } />
         </Routes>
-        <ReactQueryDevtools></ReactQueryDevtools>
+        {/* <ReactQueryDevtools></ReactQueryDevtools> */}
       </QueryClientProvider>
     </>
   );

@@ -8,7 +8,7 @@
     "@mui/icons-material": "^5.11.9",
     "@mui/joy": "^5.0.0-alpha.67",
     "@mui/lab": "^5.0.0-alpha.120",
-    "@mui/material": "^5.11.9",
+    "@mui/material": "^5.11.2",
     "@tanstack/react-query": "^4.26.1",
     "@tanstack/react-query-devtools": "^4.26.1",
     "@testing-library/jest-dom": "^5.16.5",
@@ -34,12 +34,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
