@@ -50,7 +50,7 @@ export default function DeleteCatModel({ open, setOpen, setSearchCategory, setPa
                     <Typography level='h6' fontWeight="bold" textAlign="center">Delete Category</Typography>
                     <Box>
                         <Typography sx={{ mb: "0.25rem" }}>Category</Typography>
-                        <CustomAutoComplete placeholder='search...' options={isLoading ? [] : categories}
+                        <CustomAutoComplete placeholder='search...' options={isLoading ? [] : categories.filter((v, i) => v.name !== "default")}
                             sx={{ width: "100%" }}
                             required
                             onChange={(e, value) => setCategory(value)}
