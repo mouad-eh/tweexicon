@@ -34,7 +34,7 @@ export default function SignUpCard() {
                 setPasswordNoMatch(true);
             } else {
                 axios.post(
-                    process.env.REACT_APP_SIGNUP_ENDPOINT,
+                    SIGNUP_ENDPOINT,
                     { firstName, lastName, email, password },
                     { headers: { 'Content-Type': 'application/json' } }
                 ).then(function (response) {

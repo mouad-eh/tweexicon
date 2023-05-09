@@ -11,7 +11,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import jwt from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import { HOME_PATH, JWT_COOKIE, SIGNUP_PATH } from '../utils/constants';
+import { HOME_PATH, JWT_COOKIE, SIGNIN_ENDPOINT, SIGNUP_PATH } from '../utils/constants';
 
 export default function SignInCard() {
     const navigate = useNavigate();
@@ -31,7 +31,7 @@ export default function SignInCard() {
             (e) => {
                 e.preventDefault();
                 axios.post(
-                    process.env.REACT_APP_SIGNIN_ENDPOINT,
+                    SIGNIN_ENDPOINT,
                     { email: email, password: password },
                     { headers: { 'Content-Type': 'application/json' } }
                 ).then(function (response) {

@@ -1,13 +1,13 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { JWT_COOKIE } from "./constants";
+import { CATEGORIES_ENDPOINT, JWT_COOKIE, POSTSCOUNT_ENDPOINT, POSTS_ENDPOINT, PROXY_ENDPOINT } from "./constants";
 
 export async function fetchCategories() {
     // handle user logout from another tab
     // if user logout from another tab, somehow many fetching action are triggered
     // and fetchCategories is one of them
     try {
-        const res = await axios.get(process.env.REACT_APP_CATEGORIES_ENDPOINT,
+        const res = await axios.get(CATEGORIES_ENDPOINT,
             {
                 headers: {
                     "Content-Type": "application/json",
@@ -29,7 +29,7 @@ export async function fetchPosts(category, params) {
     // NOTE: params that are null or undefined are not rendered in the URL.
     // so if we don't need to specify, we either call the function without passing params
     // or we pass null/undefined
-    let url = process.env.REACT_APP_POSTS_ENDPOINT;
+    let url = POSTS_ENDPOINT;
     if (category !== "all") {
         url = `${url}/${category}`
     }
@@ -51,7 +51,7 @@ export async function fetchPostsHtml(posts) {
         posts.map(async (post) => {
             const url = encodeURIComponent(`https://publish.twitter.com/oembed?url=${post.url}&maxwidth=350&omit_script=t`);
             try {
-                var response = await axios.get(`${process.env.REACT_APP_PROXY_ENDPOINT}?url=${url}`,
+                var response = await axios.get(`${PROXY_ENDPOINT}?url=${url}`,
                     { headers: { "Content-Type": "application/json", } }
                 )
             } catch (error) {
@@ -73,7 +73,7 @@ export async function fetchPostsHtml(posts) {
     return postsHtml;
 }
 export async function addCategory({ name, color }) {
-    const res = await axios.post(process.env.REACT_APP_CATEGORIES_ENDPOINT,
+    const res = await axios.post(CATEGORIES_ENDPOINT,
         { name, color },
         {
             headers: {
@@ -85,7 +85,7 @@ export async function addCategory({ name, color }) {
     return res;
 }
 export async function deleteCategory(category) {
-    const res = await axios.delete(`${process.env.REACT_APP_CATEGORIES_ENDPOINT}/${category.name}`,
+    const res = await axios.delete(`${CATEGORIES_ENDPOINT}/${category.name}`,
         {
             headers: {
                 "Content-Type": "application/json",
@@ -95,7 +95,7 @@ export async function deleteCategory(category) {
     return res;
 }
 export async function fetchPostsCount(category) {
-    let url = `${process.env.REACT_APP_POSTSCOUNT_ENDPOINT}`
+    let url = `${POSTSCOUNT_ENDPOINT}`
     if (category !== "all") {
         url = `${url}/${category}`
     }
@@ -110,7 +110,7 @@ export async function fetchPostsCount(category) {
 }
 
 export async function addPost(post) { //{url,category}
-    const res = await axios.post(process.env.REACT_APP_POSTS_ENDPOINT, post, {
+    const res = await axios.post(POSTS_ENDPOINT, post, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${Cookies.get(JWT_COOKIE)}`
