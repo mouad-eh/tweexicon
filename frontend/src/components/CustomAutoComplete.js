@@ -7,6 +7,12 @@ export default function CustomAutoComplete(props) {
     return (
         <Autocomplete
             {...props}
+            slotProps={{
+                listbox: {
+                    disablePortal: true,
+                }
+            }}
+            disablePortal
             getOptionLabel={(option) => option.name}
             renderOption={(props, option) => (
                 <AutocompleteOption {...props}>
