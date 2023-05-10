@@ -5,9 +5,9 @@ WORKDIR /app
 
 ENV REACT_APP_API_BASEURL="http://<domain>/api"
 
-ENV REACT_APP_DOMAIN = "<domain>"
+ENV REACT_APP_DOMAIN="<domain>"
 
-COPY ../frontend .
+COPY ./frontend .
 
 RUN npm install
 
