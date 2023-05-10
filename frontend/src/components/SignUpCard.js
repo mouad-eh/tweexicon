@@ -10,7 +10,7 @@ import axios from 'axios';
 import jwt from 'jwt-decode';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { HOME_PATH, JWT_COOKIE } from '../utils/constants';
+import { HOME_PATH, JWT_COOKIE, SIGNUP_ENDPOINT } from '../utils/constants';
 
 export default function SignUpCard() {
     const navigate = useNavigate();
