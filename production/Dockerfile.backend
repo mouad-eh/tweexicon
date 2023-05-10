@@ -1,0 +1,11 @@
+FROM node:19
+
+WORKDIR /app
+
+COPY ../backend .
+
+RUN npm install
+
+RUN npm install pm2@latest -g
+
+CMD ["pm2-runtime", "index.js"]

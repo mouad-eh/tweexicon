@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  backend:
+    build: ./Dockerfile.backend
+    env_file:
+      - .env.backend
+    expose:
+      - 3000
+  webserver:
+    build: ./Dockerfile.webserver
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
