@@ -1,11 +1,11 @@
-const mongoose = require("mongoose");
-const { mongoDataStore } = require("./mongoDB/index")
+const mongoose = require('mongoose');
+const { mongoDataStore } = require('./mongoDB/index');
 
 async function connectToDb() {
-    try {
-        await mongoose.connect(process.env.CONNECTION_STRING);
-    } catch (err) {
-        console.log(err);
-    }
+  try {
+    await mongoose.connect(process.env.CONNECTION_STRING);
+  } catch (err) {
+    console.log(err);
+  }
 }
-module.exports = { connectToDb, db: mongoDataStore }
+module.exports = { connectToDb, db: mongoDataStore };
