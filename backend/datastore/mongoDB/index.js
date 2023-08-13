@@ -22,44 +22,44 @@ const mongoDataStore = {
     return user.save();
   },
   async listNextPosts(userId, limit, cursor) {
-    userId = mongoose.mongo.ObjectId(userId);
+    const userIdObj = mongoose.mongo.ObjectId(userId);
     if (!cursor) {
-      return Post.find({ userId }).limit(limit).exec();
+      return Post.find({ userId: userIdObj }).limit(limit).exec();
     }
-    cursor = mongoose.mongo.ObjectId(cursor);
+    const cursorObj = mongoose.mongo.ObjectId(cursor);
     return Post.find({
-      userId,
-      _id: { $gt: cursor },
+      userId: userIdObj,
+      _id: { $gt: cursorObj },
     }).limit(limit).exec();
   },
   async listPreviousPosts(userId, limit, cursor) {
-    userId = mongoose.mongo.ObjectId(userId);
-    cursor = mongoose.mongo.ObjectId(cursor);
+    const userIdObj = mongoose.mongo.ObjectId(userId);
+    const cursorObj = mongoose.mongo.ObjectId(cursor);
     const posts = await Post.find({
-      userId,
-      _id: { $lt: cursor },
+      userId: userIdObj,
+      _id: { $lt: cursorObj },
     }).sort({ _id: -1 }).limit(limit).exec();
     return posts.reverse();
   },
   async listNextPostsInCategory(userId, categoryName, limit, cursor) {
-    userId = mongoose.mongo.ObjectId(userId);
+    const userIdObj = mongoose.mongo.ObjectId(userId);
     if (!cursor) {
-      return Post.find({ userId, categoryName }).limit(limit).exec();
+      return Post.find({ userId: userIdObj, categoryName }).limit(limit).exec();
     }
-    cursor = mongoose.mongo.ObjectId(cursor);
+    const cursorObj = mongoose.mongo.ObjectId(cursor);
     return Post.find({
-      userId,
+      userId: userIdObj,
       categoryName,
-      _id: { $gt: cursor },
+      _id: { $gt: cursorObj },
     }).limit(limit).exec();
   },
   async listPreviousPostsInCategory(userId, categoryName, limit, cursor) {
-    userId = mongoose.mongo.ObjectId(userId);
-    cursor = mongoose.mongo.ObjectId(cursor);
+    const userIdObj = mongoose.mongo.ObjectId(userId);
+    const cursorObj = mongoose.mongo.ObjectId(cursor);
     const posts = await Post.find({
-      userId,
+      userId: userIdObj,
       categoryName,
-      _id: { $lt: cursor },
+      _id: { $lt: cursorObj },
     }).sort({ _id: -1 }).limit(limit).exec();
     return posts.reverse();
   },

@@ -17,7 +17,7 @@ async function listPostsInCategoryHandler(req, res) {
   let posts;
   const { userId } = res.locals;
   const categoryName = req.params.category;
-  const { cursor = undefined, limit = 5, dir } = req.query;
+  const { cursor = undefined, limit = 5, dir = 'next' } = req.query;
   if (!cursor) {
     posts = await db.listNextPostsInCategory(userId, categoryName, limit);
   } else if (dir === 'next') {
