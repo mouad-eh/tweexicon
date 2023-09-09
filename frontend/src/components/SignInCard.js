@@ -7,12 +7,11 @@ import Input from '@mui/joy/Input';
 import Box from '@mui/joy/Box';
 import Link from '@mui/joy/Link';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {
-  HOME_PATH, SIGNIN_ENDPOINT, SIGNUP_PATH,
+  SIGNUP_PATH,
 } from '../utils/constants';
-import { setAuthToken } from '../utils/auth';
+import { signIn } from '../utils/apiCalls';
 
 export default function SignInCard() {
   const navigate = useNavigate();
@@ -29,24 +28,9 @@ export default function SignInCard() {
 
   return (
     <form onSubmit={
-      (e) => {
+      async (e) => {
         e.preventDefault();
-        axios.post(
-          SIGNIN_ENDPOINT,
-          { email, password },
-          { headers: { 'Content-Type': 'application/json' } },
-        ).then((response) => {
-          setAuthToken(response.data.jwt);
-          // redirection to the home page
-          navigate(HOME_PATH);
-        }).catch((err) => {
-          const { error } = err.response.data;
-          if (error.code === 450) {
-            setIncorrectEmail(true);
-          } else { // error.code == 451
-            setIncorrectPassword(true);
-          }
-        });
+        await signIn(email, password, navigate, setIncorrectEmail, setIncorrectPassword);
       }
     }
     >

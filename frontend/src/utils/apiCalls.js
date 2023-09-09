@@ -1,8 +1,45 @@
 import axios from 'axios';
 import {
-  CATEGORIES_ENDPOINT, POSTSCOUNT_ENDPOINT, POSTS_ENDPOINT, PROXY_ENDPOINT,
+  CATEGORIES_ENDPOINT, HOME_PATH, POSTSCOUNT_ENDPOINT, POSTS_ENDPOINT, PROXY_ENDPOINT, SIGNIN_ENDPOINT, SIGNUP_ENDPOINT,
 } from './constants';
-import { getAuthToken } from './auth';
+import { getAuthToken, setAuthToken } from './auth';
+
+export async function signUp(firstName, lastName, email, password, navigate, setDuplicateEmail) {
+  try {
+    const response = await axios.post(
+      SIGNUP_ENDPOINT,
+      {
+        firstName, lastName, email, password,
+      },
+      { headers: { 'Content-Type': 'application/json' } },
+    );
+    setAuthToken(response.data.jwt);
+    // redirection to the home page
+    navigate(HOME_PATH);
+  } catch (err) {
+    setDuplicateEmail(true);
+  }
+}
+
+export async function signIn(email, password, navigate, setIncorrectEmail, setIncorrectPassword) {
+  try {
+    const response = await axios.post(
+      SIGNIN_ENDPOINT,
+      { email, password },
+      { headers: { 'Content-Type': 'application/json' } },
+    );
+    setAuthToken(response.data.jwt);
+    // redirection to the home page
+    navigate(HOME_PATH);
+  } catch (err) {
+    const { error } = err.response.data;
+    if (error.code === 450) {
+      setIncorrectEmail(true);
+    } else { // error.code == 451
+      setIncorrectPassword(true);
+    }
+  }
+}
 
 export async function fetchCategories() {
   // handle user logout from another tab

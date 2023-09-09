@@ -6,10 +6,8 @@ import FormLabel from '@mui/joy/FormLabel';
 import Input from '@mui/joy/Input';
 import Box from '@mui/joy/Box';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { HOME_PATH, SIGNUP_ENDPOINT } from '../utils/constants';
-import { setAuthToken } from '../utils/auth';
+import { signUp } from '../utils/apiCalls';
 
 export default function SignUpCard() {
   const navigate = useNavigate();
@@ -27,24 +25,12 @@ export default function SignUpCard() {
     setPasswordNoMatch(false);
   }, [confirmPassword]);
   return (
-    <form onSubmit={(e) => {
+    <form onSubmit={async (e) => {
       e.preventDefault();
       if (password !== confirmPassword) {
         setPasswordNoMatch(true);
       } else {
-        axios.post(
-          SIGNUP_ENDPOINT,
-          {
-            firstName, lastName, email, password,
-          },
-          { headers: { 'Content-Type': 'application/json' } },
-        ).then((response) => {
-          setAuthToken(response.data.jwt);
-          // redirection to the home page
-          navigate(HOME_PATH);
-        }).catch(() => {
-          setDuplicateEmail(true);
-        });
+        await signUp(firstName, lastName, email, password, navigate, setDuplicateEmail);
       }
     }}
     >
