@@ -1,8 +1,8 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import {
-  CATEGORIES_ENDPOINT, JWT_COOKIE, POSTSCOUNT_ENDPOINT, POSTS_ENDPOINT, PROXY_ENDPOINT,
+  CATEGORIES_ENDPOINT, POSTSCOUNT_ENDPOINT, POSTS_ENDPOINT, PROXY_ENDPOINT,
 } from './constants';
+import { getAuthToken } from './auth';
 
 export async function fetchCategories() {
   // handle user logout from another tab
@@ -15,7 +15,7 @@ export async function fetchCategories() {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${Cookies.get(JWT_COOKIE)}`,
+          Authorization: `Bearer ${getAuthToken()}`,
         },
       },
     );
@@ -43,7 +43,7 @@ export async function fetchPosts(category, params) {
     {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${Cookies.get(JWT_COOKIE)}`,
+        Authorization: `Bearer ${getAuthToken()}`,
       },
       params, // {cursor,limit,dir}
     },
@@ -88,7 +88,7 @@ export async function addCategory({ name, color }) {
     {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${Cookies.get(JWT_COOKIE)}`,
+        Authorization: `Bearer ${getAuthToken()}`,
       },
     },
   );
@@ -100,7 +100,7 @@ export async function deleteCategory(category) {
     {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${Cookies.get(JWT_COOKIE)}`,
+        Authorization: `Bearer ${getAuthToken()}`,
       },
     },
   );
@@ -116,7 +116,7 @@ export async function fetchPostsCount(category) {
     {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${Cookies.get(JWT_COOKIE)}`,
+        Authorization: `Bearer ${getAuthToken()}`,
       },
     },
   );
@@ -127,7 +127,7 @@ export async function addPost(post) { // {url,category}
   const res = await axios.post(POSTS_ENDPOINT, post, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${Cookies.get(JWT_COOKIE)}`,
+      Authorization: `Bearer ${getAuthToken()}`,
     },
   });
   return res.data;

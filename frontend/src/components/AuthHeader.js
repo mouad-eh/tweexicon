@@ -4,12 +4,12 @@ import {
 } from '@mui/joy';
 import Logout from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import jwt from 'jwt-decode';
-import { JWT_COOKIE, queryClient } from '../utils/constants';
+import { queryClient } from '../utils/constants';
+import { deleteAuthToken, getAuthToken } from '../utils/auth';
 
 export default function AuthHeader() {
-  const payload = jwt(Cookies.get(JWT_COOKIE));
+  const payload = jwt(getAuthToken());
   function capitalize(s) {
     return s[0].toUpperCase() + s.slice(1);
   }
@@ -58,12 +58,7 @@ export default function AuthHeader() {
             startDecorator={<Logout />}
             onClick={() => {
               queryClient.clear();
-              // const payload = jwt(Cookies.get(JWT_COOKIE));
-              Cookies.remove(JWT_COOKIE, {
-                path: '/',
-                domain: process.env.REACT_APP_DOMAIN,
-                expires: new Date(payload.exp * 1000),
-              });
+              deleteAuthToken();
             }}
           >
             log out

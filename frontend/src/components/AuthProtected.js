@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SIGNIN_PATH } from '../utils/constants';
-import { isAuthenticated } from '../utils/helperFuncs';
+import { isAuthenticated } from '../utils/auth';
 
 export default function AuthProtected(props) {
   const { children } = props;

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isAuthenticated } from '../utils/helperFuncs';
+import { isAuthenticated } from '../utils/auth';
 import { HOME_PATH } from '../utils/constants';
 
 export default function AlreadyLoggedIn(props) {

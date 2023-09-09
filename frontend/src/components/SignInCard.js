@@ -8,12 +8,11 @@ import Box from '@mui/joy/Box';
 import Link from '@mui/joy/Link';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
-import jwt from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import {
-  HOME_PATH, JWT_COOKIE, SIGNIN_ENDPOINT, SIGNUP_PATH,
+  HOME_PATH, SIGNIN_ENDPOINT, SIGNUP_PATH,
 } from '../utils/constants';
+import { setAuthToken } from '../utils/auth';
 
 export default function SignInCard() {
   const navigate = useNavigate();
@@ -37,12 +36,7 @@ export default function SignInCard() {
           { email, password },
           { headers: { 'Content-Type': 'application/json' } },
         ).then((response) => {
-          const payload = jwt(response.data.jwt);
-          Cookies.set(JWT_COOKIE, response.data.jwt, {
-            path: '/',
-            domain: process.env.REACT_APP_DOMAIN,
-            expires: new Date(payload.exp * 1000),
-          });
+          setAuthToken(response.data.jwt);
           // redirection to the home page
           navigate(HOME_PATH);
         }).catch((err) => {
