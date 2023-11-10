@@ -23,7 +23,9 @@ function createExpressApp() {
     app.post('/signup', signUpHandler);
     app.post('/signin', signInHandler);
     app.use(authMiddleWare);
-
+    app.get('/secured', (req, res) => {
+        res.status(200).json({ userId: res.locals.userId });
+    });
     // posts
     app.get('/postscount', getPostsCountHandler);
     app.get('/postscount/:category', getPostsCountInCategoryHandler);
