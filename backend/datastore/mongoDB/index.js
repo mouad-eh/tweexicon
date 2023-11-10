@@ -125,6 +125,9 @@ const mongoDataStore = {
       { userId: mongoose.mongo.ObjectId(userId), categoryName },
     ).exec();
   },
+  async resetDatabase() {
+    await mongoose.connection.dropDatabase();
+  }
 };
 
 module.exports = { mongoDataStore };
