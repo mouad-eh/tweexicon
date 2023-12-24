@@ -29,6 +29,9 @@ async function listPostsInCategoryHandler(req, res) {
 }
 async function createPostHandler(req, res) {
   const { url, categoryName } = req.body;
+  if (!url || !categoryName) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
   const post = await db.createPost({
     userId: res.locals.userId,
     url,
