@@ -1,14 +1,14 @@
 const request = require('supertest');
 const { signJwt } = require('../utils/auth');
 const app = require('./setupTests');
-const mongoose = require('mongoose');
+const { db } = require('../datastore');
 
 describe('Authentication Middleware Test', () => {
-    const payload = {
-        userId: mongoose.Types.userId,
+    const testUser = {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@example.com',
+        password: 'password123',
     };
     it('should return 401 if authorization header is not present', async () => {
         const response = await request(app)
@@ -33,14 +33,21 @@ describe('Authentication Middleware Test', () => {
     });
 
     it('should set userId in locals if JWT is valid', async () => {
-        const userIdFromToken = payload.userId;
-        const validToken = signJwt(payload);
+        const user = await db.createUser(testUser)
+        const validToken = signJwt(
+            {
+                userId: user._id,   // user._id is of type ObjectId
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email
+            }
+        );
 
         const response = await request(app)
             .get('/secured')
             .set('Authorization', `Bearer ${validToken}`)
             .expect(200);
 
-        expect(response.body).toEqual({ userId: userIdFromToken });
+        expect(response.body).toEqual({ userId: user._id.toString() });
     });
 });
