@@ -1,17 +1,13 @@
 const request = require('supertest');
-const { signJwt } = require('../utils/auth');
+const { signJwt, hashPassword } = require('../utils/auth');
 const app = require('./setupTests');
 const { db } = require('../datastore');
+const { testUser } = require('./testData')
 
 describe('Authentication Middleware Test', () => {
-    const testUser = {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@example.com',
-        password: 'password123',
-    };
     it('should return 401 if authorization header is not present', async () => {
         const response = await request(app)
+            // the purpose of '/secured' endpoint is to test the auth middleware
             .get('/secured')
             .expect(401);
 
@@ -33,7 +29,8 @@ describe('Authentication Middleware Test', () => {
     });
 
     it('should set userId in locals if JWT is valid', async () => {
-        const user = await db.createUser(testUser)
+        // Simulate a successful sign up operation
+        const user = await db.createUser({ ...testUser, password: hashPassword(testUser.password) });
         const validToken = signJwt(
             {
                 userId: user._id,   // user._id is of type ObjectId

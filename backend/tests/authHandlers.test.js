@@ -2,16 +2,9 @@ const supertest = require('supertest');
 const { db } = require('../datastore/index');
 const { hashPassword } = require('../utils/auth');
 const app = require('./setupTests')
+const { testUser } = require('./testData')
 
 describe('Authentication End-to-End Tests', () => {
-    // Define a test user for sign-in tests
-    const testUser = {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@example.com',
-        password: 'password123',
-    };
-
     describe('POST /signup', () => {
         it('should sign up a new user and return a JWT token', async () => {
             const response = await supertest(app)
@@ -23,8 +16,8 @@ describe('Authentication End-to-End Tests', () => {
         });
 
         it('should return 400 if email is already in use', async () => {
-            // Create a user with the same email before the test
-            await db.createUser(testUser);
+            // Simulate a successful sign up operation
+            await db.createUser({ ...testUser, password: hashPassword(testUser.password) });
 
             const response = await supertest(app)
                 .post('/signup')
