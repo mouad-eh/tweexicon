@@ -1,33 +1,21 @@
 const request = require('supertest');
 const app = require('./setupTests');
 const { db } = require('../datastore');
-const { verifyJwt } = require('../utils/auth');
-
-const testUser = {
-  firstName: 'John',
-  lastName: 'Doe',
-  email: 'john.doe@example.com',
-  password: 'password123',
-};
-
-const testCategory1 = {
-  name: 'life',
-  color: '#ff0000',
-};
-
-const testCategory2 = {
-  name: 'work',
-  color: '#000000',
-};
+const { verifyJwt, signJwt, hashPassword } = require('../utils/auth');
+const { testUser, testCategory1, testCategory2 } = require('./testData');
 
 let jwt;
 beforeEach(async () => {
-  // create a user
-  const response = await request(app)
-    .post('/signup')
-    .send(testUser);
-    // response.body.jwt
-  jwt = response.body.jwt;
+  // simulate a successful sign up operation
+  const user = await db.createUser({ ...testUser, password: hashPassword(testUser.password) });
+  jwt = signJwt(
+    {
+      userId: user._id, // user._id is of type ObjectId
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+    },
+  );
 });
 
 describe('Category related endpoints End-to-End Tests', () => {
