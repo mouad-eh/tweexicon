@@ -127,7 +127,7 @@ const mongoDataStore = {
   },
   async resetDatabase() {
     await mongoose.connection.dropDatabase();
-  }
+  },
 };
 
 module.exports = { mongoDataStore };
