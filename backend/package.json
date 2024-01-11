@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./index.js",
-    "test": "jest --config=jest.config.js --detectOpenHandles"
+    "test": "jest --config=jest.config.js --detectOpenHandles",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
