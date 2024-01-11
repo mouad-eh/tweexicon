@@ -31,10 +31,6 @@ function createExpressApp() {
   app.get('/postscount/:category', getPostsCountInCategoryHandler);
   app.get('/posts', listPostsHandler);
   app.get('/posts/:category', listPostsInCategoryHandler);
-  // app.get("/posts/:id", (req, res) => {
-  //     // getPostById(userId,posjtId)
-  // });
-  // this endpoint is commented because it overlaps with 'GET /posts/:category'
   app.post('/posts', createPostHandler);
   app.delete('/posts/:id', deletePostHandler);
 
