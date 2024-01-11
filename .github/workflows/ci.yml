@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.10.0'
+
+    - name: Install dependencies
+      run: |
+        cd backend
+        npm install
+
+    - name: Lint backend
+      run: |
+        cd backend
+        npm run lint
+
+    - name: Run tests
+      run: |
+        cd backend
+        npm test
+
+  frontend:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.10.0'
+
+    - name: Install dependencies
+      run: |
+        cd frontend
+        npm install
+
+    - name: Lint frontend
+      run: |
+        cd frontend
+        npm run lint
