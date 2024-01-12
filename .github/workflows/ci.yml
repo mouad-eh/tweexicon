@@ -13,7 +13,6 @@ jobs:
         image: mongo:latest
         ports:
           - 27017:27017
-        options: --health-cmd="mongo --eval 'db.runCommand({ connectionStatus: 1 })'"
     env:
       CONNECTION_STRING: mongodb://127.0.0.1:27017/tweexicon?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.0
       PORT: 3000
