@@ -8,10 +8,24 @@ on:
 jobs:
   backend:
     runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        options: --health-cmd="mongo --eval 'db.runCommand({ connectionStatus: 1 })'"
+    env:
+      CONNECTION_STRING: mongodb://127.0.0.1:27017/tweexicon?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.0
+      PORT: 3000
+      PASSWORD_SALT: "d0a7f2e1b9c4a8d3"
+      JWT_SECRET: "9f1b5e3d8a2c7f6b"
+      JWT_VALIDITY: "1d"
     
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
+      with:
+        sparse-checkout: backend
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -19,26 +33,22 @@ jobs:
         node-version: '20.10.0'
 
     - name: Install dependencies
-      run: |
-        cd backend
-        npm install
+      run: npm install
 
     - name: Lint backend
-      run: |
-        cd backend
-        npm run lint
+      run: npm run lint
 
     - name: Run tests
-      run: |
-        cd backend
-        npm test
+      run: npm test
 
   frontend:
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
+      with:
+        sparse-checkout: frontend
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -46,11 +56,7 @@ jobs:
         node-version: '20.10.0'
 
     - name: Install dependencies
-      run: |
-        cd frontend
-        npm install
+      run: npm install
 
     - name: Lint frontend
-      run: |
-        cd frontend
-        npm run lint
+      run: npm run lint
