@@ -1,0 +1,30 @@
+name: frontend CI
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'frontend/**'
+
+jobs:
+  frontend-ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.10.0'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Lint frontend
+      run: npm run lint

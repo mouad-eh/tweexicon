@@ -1,13 +1,18 @@
-name: CI
+name: backend CI
 
 on:
   pull_request:
     branches:
       - master
+    paths:
+      - 'backend/**'
 
 jobs:
-  backend:
+  backend-ci:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
     services:
       mongodb:
         image: mongo:latest
@@ -23,8 +28,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        sparse-checkout: backend
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -39,23 +42,3 @@ jobs:
 
     - name: Run tests
       run: npm test
-
-  frontend:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        sparse-checkout: frontend
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20.10.0'
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Lint frontend
-      run: npm run lint
