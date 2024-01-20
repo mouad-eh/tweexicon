@@ -33,3 +33,100 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+  
+  push_webserver_to_registry:
+    name: Push webserver Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    env:
+      REACT_APP_DOMAIN: ${{ secrets.REACT_APP_DOMAIN }}
+      REACT_APP_API_BASEURL: ${{ secrets.REACT_APP_API_BASEURL }}
+      PORT: 80
+    
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.10.0'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: frontend
+
+      - name: build frontend
+        run: npm run build
+        working-directory: frontend
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: melhaouari/tweexicon-webserver
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: ./Dockerfile.webserver
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+  
+  deploy-containers-on-production-server:
+    name: Deploy Containers on production server
+    runs-on: ubuntu-latest
+
+    env:
+      DOMAIN_NAME: ${{ secrets.REACT_APP_DOMAIN }}
+      CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}
+      PORT: ${{ secrets.BACKEND_PORT }}
+      PASSWORD_SALT: ${{ secrets.PASSWORD_SALT }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_VALIDITY: ${{ secrets.JWT_VALIDITY }}
+    
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Create .env.backend file
+        run: |
+          echo "CONNECTION_STRING=${CONNECTION_STRING}" >> .env.backend
+          echo "PORT=${PORT}" >> .env.backend
+          echo "PASSWORD_SALT=${PASSWORD_SALT}" >> .env.backend
+          echo "JWT_SECRET=${JWT_SECRET}" >> .env.backend
+          echo "JWT_VALIDITY=${JWT_VALIDITY}" >> .env.backend
+
+      - name: Create .env.webserver file
+        run: echo "DOMAIN_NAME=${DOMAIN_NAME}" >> .env.webserver
+
+      - name: Copy files to production server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "docker-compose.yml,.env.backend,.env.webserver"
+          target: "/root/app"
+
+      - name: Run deployment script via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          command_timeout: 15m
+          script: | 
+            cd /root/app
+            docker-compose down
+            docker-compose pull
+            docker-compose up -d --force-recreate

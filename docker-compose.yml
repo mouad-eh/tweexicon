@@ -2,18 +2,18 @@ version: '2'
 
 services:
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile.backend
+    image: melhaouari/tweexicon-backend:master
     env_file:
       - .env.backend
     expose:
       - 3000
   webserver:
-    build:
-      context: .
-      dockerfile: Dockerfile.webserver
+    image: melhaouari/tweexicon-webserver:master
     depends_on:
       - backend
+    env_file:
+      - .env.webserver
+    volumes:
+      - /root/ssl/certs/live/tweexicon.live:/etc/ssl
     ports:
       - "443:443"
