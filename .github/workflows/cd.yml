@@ -98,7 +98,7 @@ jobs:
 
       - name: Create .env.backend file
         run: |
-          echo "CONNECTION_STRING=${CONNECTION_STRING}" >> .env.backend
+          echo "CONNECTION_STRING='${CONNECTION_STRING}'" >> .env.backend
           echo "PORT=${PORT}" >> .env.backend
           echo "PASSWORD_SALT=${PASSWORD_SALT}" >> .env.backend
           echo "JWT_SECRET=${JWT_SECRET}" >> .env.backend
@@ -108,7 +108,7 @@ jobs:
         run: echo "DOMAIN_NAME=${DOMAIN_NAME}" >> .env.webserver
 
       - name: Copy files to production server
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
@@ -116,6 +116,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           source: "docker-compose.yml,.env.backend,.env.webserver"
           target: "/root/app"
+          timeout: 120s
 
       - name: Run deployment script via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -127,6 +128,6 @@ jobs:
           command_timeout: 15m
           script: | 
             cd /root/app
-            docker-compose down
-            docker-compose pull
-            docker-compose up -d --force-recreate
+            docker compose down
+            docker compose pull
+            docker compose up -d --force-recreate

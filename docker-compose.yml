@@ -15,5 +15,6 @@ services:
       - .env.webserver
     volumes:
       - /root/ssl/certs/live/tweexicon.live:/etc/ssl
+      - /root/ssl/certs/archive/tweexicon.live:/archive/tweexicon.live
     ports:
       - "443:443"
