@@ -108,7 +108,7 @@ jobs:
         run: echo "DOMAIN_NAME=${DOMAIN_NAME}" >> .env.webserver
 
       - name: Copy files to production server
-        uses: appleboy/scp-action@v0.1.3
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
