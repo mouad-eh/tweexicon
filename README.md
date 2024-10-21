@@ -2,6 +2,16 @@
 
 Tweexicon is a web application that provides a simple solution for saving and organizing tweets into categories. With Tweexicon, users can save tweets by providing their URLs and selecting one of the previously created categories for the tweet. This app is designed to help users easily keep track of important tweets, whether it's for personal or professional use. The app is user-friendly and easy to use, allowing users to quickly categorize and access their saved tweets whenever they need them.
 
+here are some screenshots of tweexicon:
+### Main Page
+![main page](./frontend/src/assets/main.png "this is the main page of tweexicon")
+### Add Category
+![add category](./frontend/src/assets/add-cate.png "this is add category model in tweexcion")
+### Add Post
+![add post](./frontend/src/assets/add-poste.png "this is add post model in tweexicon")
+### Filter tweets by category
+![filter by category page](./frontend/src/assets/filter.png "this screen shots shows how user can filter tweets by category in tweexicon")
+
 # Database
 
 Tweexicon is a web application that allows users to save and organize tweets into categories. The MongoDB database for Tweexicon consists of two collections: "users" and "posts".
@@ -92,16 +102,6 @@ For the frontend, we are using Material UI as a React component library. Materia
 In terms of displaying tweets, we are using the Twitter OEmbed API. This API allows us to embed a tweet in a web page by simply providing its URL. By using this API, we can display tweets as they appear on Twitter, complete with media, links, and other embedded content.
 
 The frontend of Tweexicon is designed to be responsive. This means that the layout and design of the app will adapt to different screen sizes and devices. Additionally, the UI is designed to be intuitive and user-friendly, with clear navigation and feedback
-
-here are some screenshots of tweexicon:
-### Main Page
-![main page](./frontend/src/assets/main.png "this is the main page of tweexicon")
-### Add Category
-![add category](./frontend/src/assets/add-cate.png "this is add category model in tweexcion")
-### Add Post
-![add post](./frontend/src/assets/add-poste.png "this is add post model in tweexicon")
-### Filter tweets by category
-![filter by category page](./frontend/src/assets/filter.png "this screen shots shows how user can filter tweets by category in tweexicon")
 
 # deployment
 
